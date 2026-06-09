@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #F9F7F4;
+  --color-dot: #1A1A1A;
+  --color-ink: #1C1C1E;
+  --color-ink-muted: #6B6B6B;
+  --color-gold: #C9A84C;
+  --color-gold-light: #F0DFA0;
+  --color-terracotta: #B5503A;
+  --color-surface: #FFFFFF;
+  --color-border: #E4E0D8;
+
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-script: "Dancing Script", cursive;
+  --font-mono: "DM Mono", monospace;
+}
+
+:root {
+  --color-bg: #F9F7F4;
+  --color-dot: #1A1A1A;
+  --color-ink: #1C1C1E;
+  --color-ink-muted: #6B6B6B;
+  --color-gold: #C9A84C;
+  --color-gold-light: #F0DFA0;
+  --color-terracotta: #B5503A;
+  --color-surface: #FFFFFF;
+  --color-border: #E4E0D8;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "DM Sans", system-ui, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-display { font-family: "Cormorant Garamond", Georgia, serif; }
+.font-script { font-family: "Dancing Script", cursive; }
+.font-mono-custom { font-family: "DM Mono", monospace; }
+
+/* Polka dot backgrounds */
+.dot-bg {
+  background-image: radial-gradient(circle, rgba(26,26,26,0.08) 1.5px, transparent 1.5px);
+  background-size: 28px 28px;
+  background-color: var(--color-bg);
+}
+.dot-bg-sm {
+  background-image: radial-gradient(circle, rgba(26,26,26,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-color: var(--color-bg);
+}
+.dot-bg-lg {
+  background-image: radial-gradient(circle, rgba(26,26,26,0.05) 2px, transparent 2px);
+  background-size: 40px 40px;
+  background-color: var(--color-bg);
+}
+
+/* Marquee */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 30s linear infinite;
+  display: flex;
+  width: max-content;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #e8e4de 25%, #f0ece6 50%, #e8e4de 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Image swap on hover */
+.img-hover-swap { position: relative; overflow: hidden; }
+.img-hover-swap img:nth-child(2) {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.img-hover-swap:hover img:nth-child(2) { opacity: 1; }
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-gold); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .marquee-track { animation: none; }
+}
