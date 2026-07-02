@@ -1,10 +1,4 @@
-export type CategorySlug =
-  | 'sarees'
-  | 'kurtis'
-  | 'lehengas'
-  | 'salwar-kameez'
-  | 'anarkalis'
-  | 'new-arrivals';
+export type CategorySlug = 'products' | 'new-arrivals';
 
 export type SizeOption = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL';
 

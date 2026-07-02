@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+﻿import { useState, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -66,7 +66,7 @@ export default function ShopPage() {
       >
         <h1
           className="text-[var(--color-ink)]"
-          style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: 'clamp(2rem,4vw,3.2rem)' }}
+          style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300, fontSize: 'clamp(2rem,4vw,3.2rem)' }}
         >
           {currentCat?.name ?? (searchQ ? `Results for "${searchQ}"` : 'All Collections')}
         </h1>
@@ -80,7 +80,7 @@ export default function ShopPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div className="flex gap-10">
-          {/* Sidebar — desktop */}
+          {/* Sidebar â€” desktop */}
           <aside className="hidden lg:block w-64 shrink-0" aria-label="Filters">
             <FilterPanel />
           </aside>
@@ -216,7 +216,7 @@ function FilterPanel({ onDone }: { onDone?: () => void }) {
 
       {/* Price range */}
       <div>
-        <p className="text-xs uppercase tracking-widest text-[var(--color-ink-muted)] mb-3">Price (৳)</p>
+        <p className="text-xs uppercase tracking-widest text-[var(--color-ink-muted)] mb-3">Price (à§³)</p>
         <div className="flex items-center gap-3">
           <input
             type="number"
@@ -228,7 +228,7 @@ function FilterPanel({ onDone }: { onDone?: () => void }) {
             aria-label="Minimum price"
             style={{ fontFamily: '"DM Mono",monospace' }}
           />
-          <span className="text-[var(--color-ink-muted)] text-xs">—</span>
+          <span className="text-[var(--color-ink-muted)] text-xs">â€”</span>
           <input
             type="number"
             value={priceMax}

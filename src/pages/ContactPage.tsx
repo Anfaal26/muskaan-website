@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MessageCircle, Mail, MapPin } from 'lucide-react';
 
@@ -16,7 +16,7 @@ import Select from '../components/ui/Select';
 import { useToast } from '../hooks/useToast';
 
 const subjectOptions = [
-  { value: '', label: 'Select a subject…' },
+  { value: '', label: 'Select a subjectâ€¦' },
   { value: 'order', label: 'Order Inquiry' },
   { value: 'tailoring', label: 'Custom Tailoring' },
   { value: 'general', label: 'General Question' },
@@ -63,7 +63,7 @@ export default function ContactPage() {
     console.log('Form submission:', form);
     setLoading(false);
     setForm(empty);
-    show('Message sent! We\'ll get back to you within 24 hours. 💛', 'success');
+    show('Message sent! We\'ll get back to you within 24 hours. ðŸ’›', 'success');
   };
 
   const set = (field: keyof FormState) => (
@@ -84,12 +84,12 @@ export default function ContactPage() {
         >
           <h1
             className="text-[var(--color-ink)]"
-            style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
+            style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300, fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
           >
             Get in Touch
           </h1>
           <p className="text-[var(--color-ink-muted)] mt-3 max-w-md mx-auto text-sm">
-            We'd love to hear from you — whether it's an order question, custom tailoring enquiry, or just a hello.
+            We'd love to hear from you â€” whether it's an order question, custom tailoring enquiry, or just a hello.
           </p>
         </motion.div>
 
@@ -150,7 +150,7 @@ export default function ContactPage() {
                 <textarea
                   id="message"
                   rows={5}
-                  placeholder="Tell us how we can help…"
+                  placeholder="Tell us how we can helpâ€¦"
                   value={form.message}
                   onChange={set('message')}
                   required
@@ -187,7 +187,7 @@ export default function ContactPage() {
             >
               <h2
                 className="text-xl text-[var(--color-ink)]"
-                style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 400 }}
+                style={{ fontFamily: '"Playfair Display", serif', fontWeight: 400 }}
               >
                 Contact Details
               </h2>
@@ -209,7 +209,7 @@ export default function ContactPage() {
                     WhatsApp (fastest response)
                   </p>
                   <p className="text-xs text-[var(--color-ink-muted)] mt-0.5">
-                    +880 1X-XXXXXXXX · Tap to chat
+                    +880 1X-XXXXXXXX Â· Tap to chat
                   </p>
                 </div>
               </a>
@@ -276,7 +276,7 @@ export default function ContactPage() {
             >
               <p
                 className="font-medium text-[var(--color-ink)] mb-1"
-                style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1.1rem' }}
+                style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.1rem' }}
               >
                 Custom Tailoring?
               </p>

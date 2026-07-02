@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { categories } from '../../data/categories';
 
@@ -15,7 +15,7 @@ export default function CategoryShowcase() {
         <h2
           className="text-[var(--color-ink)]"
           style={{
-            fontFamily: '"Cormorant Garamond", serif',
+            fontFamily: '"Playfair Display", serif',
             fontWeight: 300,
             fontSize: 'clamp(2rem, 4vw, 3rem)',
           }}
@@ -26,7 +26,7 @@ export default function CategoryShowcase() {
           to="/shop"
           className="text-sm text-[var(--color-ink-muted)] hover:text-[var(--color-gold)] transition-colors whitespace-nowrap"
         >
-          View All →
+          View All â†’
         </Link>
       </motion.div>
 
@@ -43,7 +43,7 @@ export default function CategoryShowcase() {
           <CategoryCard cat={categories[0]} tall />
         </motion.div>
 
-        {/* Right 4 cards in 2×2 */}
+        {/* Right 4 cards in 2Ã—2 */}
         {categories.slice(1).map((cat, i) => (
           <motion.div
             key={cat.slug}
@@ -95,7 +95,7 @@ function CategoryCard({ cat, tall }: CategoryCardProps) {
         <h3
           className="text-[var(--color-ink)] group-hover:text-[var(--color-gold)] transition-colors"
           style={{
-            fontFamily: '"Cormorant Garamond", serif',
+            fontFamily: '"Playfair Display", serif',
             fontWeight: 400,
             fontSize: tall ? '1.9rem' : '1.4rem',
           }}

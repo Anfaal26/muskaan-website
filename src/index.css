@@ -11,7 +11,7 @@
   --color-surface: #FFFFFF;
   --color-border: #E4E0D8;
 
-  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-display: "Playfair Display", Georgia, serif;
   --font-body: "DM Sans", system-ui, sans-serif;
   --font-script: "Dancing Script", cursive;
   --font-mono: "DM Mono", monospace;
@@ -46,7 +46,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.font-display { font-family: "Cormorant Garamond", Georgia, serif; }
+.font-display { font-family: "Playfair Display", Georgia, serif; }
 .font-script { font-family: "Dancing Script", cursive; }
 .font-mono-custom { font-family: "DM Mono", monospace; }
 

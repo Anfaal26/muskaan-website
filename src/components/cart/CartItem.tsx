@@ -1,4 +1,4 @@
-import { X, Plus, Minus } from 'lucide-react';
+﻿import { X, Plus, Minus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore';
 import type { CartItem as CartItemType } from '../../types';
@@ -32,7 +32,7 @@ export default function CartItem({ item }: CartItemProps) {
         <Link
           to={`/product/${product.slug}`}
           className="text-sm text-[var(--color-ink)] hover:text-[var(--color-gold)] transition-colors line-clamp-2"
-          style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '0.95rem' }}
+          style={{ fontFamily: '"Playfair Display", serif', fontSize: '0.95rem' }}
         >
           {product.name}
         </Link>
@@ -86,7 +86,7 @@ export default function CartItem({ item }: CartItemProps) {
             className="text-sm font-medium text-[var(--color-ink)]"
             style={{ fontFamily: '"DM Mono", monospace' }}
           >
-            ৳{(product.price * quantity).toLocaleString()}
+            à§³{(product.price * quantity).toLocaleString()}
           </span>
         </div>
       </div>

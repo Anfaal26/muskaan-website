@@ -1,0 +1,12 @@
+﻿{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "muskaan-dev",
+      "runtimeExecutable": "F:\\NodeJS\\node.exe",
+      "runtimeArgs": ["F:\\NodeJS\\node_modules\\npm\\bin\\npx-cli.js", "vite", "--host"],
+      "port": 5173,
+      "cwd": "D:\\muskaan_website"
+    }
+  ]
+}

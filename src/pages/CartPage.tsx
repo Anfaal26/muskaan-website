@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '../store/cartStore';
@@ -18,7 +18,7 @@ export default function CartPage() {
   const orderTotal = subtotal + shipping;
 
   const handleCheckout = () => {
-    show('Checkout coming soon — stay tuned! 🎉', 'info');
+    show('Checkout coming soon â€” stay tuned! ðŸŽ‰', 'info');
   };
 
   if (!items.length) {
@@ -28,7 +28,7 @@ export default function CartPage() {
           <ShoppingBag size={64} className="text-[var(--color-border)]" aria-hidden="true" />
           <h1
             className="text-[var(--color-ink)]"
-            style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: '2.5rem' }}
+            style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300, fontSize: '2.5rem' }}
           >
             Your bag is empty
           </h1>
@@ -36,7 +36,7 @@ export default function CartPage() {
             Looks like you haven't added anything yet. Explore our collection and find something beautiful.
           </p>
           <Link to="/shop">
-            <Button variant="primary" size="lg">Start Shopping →</Button>
+            <Button variant="primary" size="lg">Start Shopping â†’</Button>
           </Link>
         </div>
       </PageWrapper>
@@ -57,7 +57,7 @@ export default function CartPage() {
           <div className="flex-1 h-px bg-[var(--color-border)]" aria-hidden="true" />
           <h1
             className="text-[var(--color-ink)]"
-            style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: '2rem' }}
+            style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300, fontSize: '2rem' }}
           >
             Your Bag ({items.length} {items.length === 1 ? 'item' : 'items'})
           </h1>
@@ -101,7 +101,7 @@ export default function CartPage() {
                       <Link
                         to={`/product/${item.product.slug}`}
                         className="text-sm text-[var(--color-ink)] hover:text-[var(--color-gold)] transition-colors"
-                        style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1rem' }}
+                        style={{ fontFamily: '"Playfair Display", serif', fontSize: '1rem' }}
                       >
                         {item.product.name}
                       </Link>
@@ -131,7 +131,7 @@ export default function CartPage() {
                       className="w-9 h-9 flex items-center justify-center text-[var(--color-ink-muted)] hover:bg-[var(--color-border)] cursor-pointer transition-colors text-lg leading-none"
                       aria-label="Decrease"
                     >
-                      −
+                      âˆ’
                     </button>
                     <span
                       className="w-10 text-center text-sm text-[var(--color-ink)]"
@@ -154,7 +154,7 @@ export default function CartPage() {
                     className="text-sm font-medium text-right text-[var(--color-ink)]"
                     style={{ fontFamily: '"DM Mono", monospace' }}
                   >
-                    ৳{(item.product.price * item.quantity).toLocaleString()}
+                    à§³{(item.product.price * item.quantity).toLocaleString()}
                   </div>
 
                   {/* Remove */}
@@ -190,27 +190,27 @@ export default function CartPage() {
           >
             <h2
               className="text-lg text-[var(--color-ink)] border-b pb-4"
-              style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 400, borderColor: 'var(--color-border)' }}
+              style={{ fontFamily: '"Playfair Display", serif', fontWeight: 400, borderColor: 'var(--color-border)' }}
             >
               Order Summary
             </h2>
 
             <div className="flex justify-between text-sm text-[var(--color-ink-muted)]">
               <span>Subtotal</span>
-              <span style={{ fontFamily: '"DM Mono", monospace' }}>৳{subtotal.toLocaleString()}</span>
+              <span style={{ fontFamily: '"DM Mono", monospace' }}>à§³{subtotal.toLocaleString()}</span>
             </div>
 
             <div className="flex justify-between text-sm text-[var(--color-ink-muted)]">
               <span>Shipping</span>
               <span style={{ fontFamily: '"DM Mono", monospace' }}>
-                {shipping === 0 ? (items.length ? 'Free 🎉' : '—') : `৳${shipping}`}
+                {shipping === 0 ? (items.length ? 'Free ðŸŽ‰' : 'â€”') : `à§³${shipping}`}
               </span>
             </div>
 
             {subtotal > 0 && subtotal < SHIPPING_THRESHOLD && (
               <p className="text-xs text-[var(--color-ink-muted)] bg-[var(--color-bg)] rounded-sm px-3 py-2">
                 Add <strong style={{ color: 'var(--color-gold)', fontFamily: '"DM Mono",monospace' }}>
-                  ৳{(SHIPPING_THRESHOLD - subtotal).toLocaleString()}
+                  à§³{(SHIPPING_THRESHOLD - subtotal).toLocaleString()}
                 </strong> more for free shipping
               </p>
             )}
@@ -226,7 +226,7 @@ export default function CartPage() {
               style={{ borderColor: 'var(--color-border)' }}
             >
               <span>Total</span>
-              <span style={{ fontFamily: '"DM Mono", monospace' }}>৳{orderTotal.toLocaleString()}</span>
+              <span style={{ fontFamily: '"DM Mono", monospace' }}>à§³{orderTotal.toLocaleString()}</span>
             </div>
 
             <Button variant="primary" fullWidth size="lg" onClick={handleCheckout}>
@@ -234,7 +234,7 @@ export default function CartPage() {
             </Button>
 
             <p className="text-xs text-center text-[var(--color-ink-muted)]">
-              Secure checkout · Free returns within 7 days
+              Secure checkout Â· Free returns within 7 days
             </p>
           </aside>
         </div>

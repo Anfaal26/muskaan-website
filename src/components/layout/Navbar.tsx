@@ -6,10 +6,7 @@ import { useCartStore } from '../../store/cartStore';
 import { useWishlistStore } from '../../store/wishlistStore';
 
 const navLinks = [
-  { label: 'Sarees', to: '/shop/sarees' },
-  { label: 'Kurtis', to: '/shop/kurtis' },
-  { label: 'Lehengas', to: '/shop/lehengas' },
-  { label: 'Sets', to: '/shop/salwar-kameez' },
+  { label: 'Products', to: '/shop' },
   { label: 'New Arrivals', to: '/shop/new-arrivals', gold: true },
 ];
 
@@ -49,15 +46,13 @@ export default function Navbar() {
         }}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center h-16 gap-6">
-          {/* Wordmark */}
-          <Link
-            to="/"
-            className="font-script text-2xl text-[var(--color-ink)] shrink-0 hover:text-[var(--color-gold)] transition-colors"
-            style={{ fontFamily: '"Dancing Script", cursive' }}
-            aria-label="Muskaan — go to homepage"
-          >
-            Muskaan
-            <span className="text-[var(--color-gold)] ml-1 text-lg">✦</span>
+          {/* Logo */}
+          <Link to="/" aria-label="Muskaan Boutique — go to homepage" className="shrink-0">
+            <img
+              src="/logo.jpg"
+              alt="Muskaan Boutique"
+              className="h-10 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -182,7 +177,7 @@ export default function Navbar() {
                     to={l.to}
                     onClick={() => setMobileOpen(false)}
                     className="block py-4 border-b border-[var(--color-border)] font-display text-3xl font-light text-[var(--color-ink)] hover:text-[var(--color-gold)] transition-colors"
-                    style={{ fontFamily: '"Cormorant Garamond", serif' }}
+                    style={{ fontFamily: '"Playfair Display", serif' }}
                   >
                     {l.label}
                   </NavLink>

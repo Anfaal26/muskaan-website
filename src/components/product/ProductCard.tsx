@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { Heart, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '../../store/cartStore';
@@ -22,7 +22,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
     e.preventDefault();
     toggle(product);
     show(
-      wishlisted ? 'Removed from wishlist' : 'Added to wishlist ♡',
+      wishlisted ? 'Removed from wishlist' : 'Added to wishlist â™¡',
       wishlisted ? 'info' : 'success'
     );
   };
@@ -85,14 +85,14 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             {product.images[1] && (
               <img
                 src={product.images[1]}
-                alt={`${product.name} — alternate view`}
+                alt={`${product.name} â€” alternate view`}
                 loading="lazy"
                 className="w-full h-full object-cover"
               />
             )}
           </div>
 
-          {/* Quick add — slides up on hover */}
+          {/* Quick add â€” slides up on hover */}
           <div
             className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-250"
           >
@@ -113,7 +113,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
           <span className="text-[10px] uppercase tracking-widest text-[var(--color-ink-muted)]">{product.category.replace('-', ' ')}</span>
           <h3
             className="text-sm text-[var(--color-ink)] group-hover:text-[var(--color-gold)] transition-colors line-clamp-1"
-            style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1rem', fontWeight: 400 }}
+            style={{ fontFamily: '"Playfair Display", serif', fontSize: '1rem', fontWeight: 400 }}
           >
             {product.name}
           </h3>
@@ -123,7 +123,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
                 className="text-xs line-through text-[var(--color-ink-muted)]"
                 style={{ fontFamily: '"DM Mono", monospace' }}
               >
-                ৳{product.originalPrice.toLocaleString()}
+                à§³{product.originalPrice.toLocaleString()}
               </span>
             )}
             <span
@@ -133,7 +133,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
                 color: product.originalPrice ? 'var(--color-terracotta)' : 'var(--color-ink)',
               }}
             >
-              ৳{product.price.toLocaleString()}
+              à§³{product.price.toLocaleString()}
             </span>
           </div>
         </div>

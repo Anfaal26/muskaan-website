@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
 import { testimonials } from '../../data/testimonials';
 
@@ -33,7 +33,7 @@ export default function Testimonials() {
         <h2
           className="text-[var(--color-ink)]"
           style={{
-            fontFamily: '"Cormorant Garamond", serif',
+            fontFamily: '"Playfair Display", serif',
             fontWeight: 300,
             fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
           }}

@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion';
+﻿import { AnimatePresence, motion } from 'framer-motion';
 import { X, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore';
@@ -50,7 +50,7 @@ export default function CartDrawer() {
             >
               <h2
                 className="text-xl flex items-center gap-2"
-                style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 400 }}
+                style={{ fontFamily: '"Playfair Display", serif', fontWeight: 400 }}
               >
                 <ShoppingBag size={18} aria-hidden="true" />
                 Your Bag
@@ -81,7 +81,7 @@ export default function CartDrawer() {
                   <div>
                     <p
                       className="text-xl mb-1 text-[var(--color-ink)]"
-                      style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300 }}
+                      style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300 }}
                     >
                       Your bag is empty
                     </p>
@@ -90,7 +90,7 @@ export default function CartDrawer() {
                     </p>
                   </div>
                   <Link to="/shop" onClick={closeDrawer}>
-                    <Button variant="primary" size="sm">Start Shopping →</Button>
+                    <Button variant="primary" size="sm">Start Shopping â†’</Button>
                   </Link>
                 </div>
               ) : (
@@ -110,7 +110,7 @@ export default function CartDrawer() {
                 {subtotal < SHIPPING_THRESHOLD && (
                   <div className="text-xs text-[var(--color-ink-muted)] mb-1">
                     Add <span style={{ color: 'var(--color-gold)', fontFamily: '"DM Mono",monospace' }}>
-                      ৳{(SHIPPING_THRESHOLD - subtotal).toLocaleString()}
+                      à§³{(SHIPPING_THRESHOLD - subtotal).toLocaleString()}
                     </span> more for free shipping
                     <div
                       className="mt-1.5 h-1 rounded-full overflow-hidden"
@@ -126,12 +126,12 @@ export default function CartDrawer() {
 
                 <div className="flex justify-between text-sm text-[var(--color-ink-muted)]">
                   <span>Subtotal</span>
-                  <span style={{ fontFamily: '"DM Mono",monospace' }}>৳{subtotal.toLocaleString()}</span>
+                  <span style={{ fontFamily: '"DM Mono",monospace' }}>à§³{subtotal.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-sm text-[var(--color-ink-muted)]">
                   <span>Shipping</span>
                   <span style={{ fontFamily: '"DM Mono",monospace' }}>
-                    {shipping === 0 ? 'Free' : `৳${shipping}`}
+                    {shipping === 0 ? 'Free' : `à§³${shipping}`}
                   </span>
                 </div>
                 <div
@@ -139,7 +139,7 @@ export default function CartDrawer() {
                   style={{ borderColor: 'var(--color-border)' }}
                 >
                   <span>Total</span>
-                  <span style={{ fontFamily: '"DM Mono",monospace' }}>৳{orderTotal.toLocaleString()}</span>
+                  <span style={{ fontFamily: '"DM Mono",monospace' }}>à§³{orderTotal.toLocaleString()}</span>
                 </div>
 
                 <Link

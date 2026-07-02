@@ -1,4 +1,4 @@
-function InstagramIcon() {
+﻿function InstagramIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -25,7 +25,7 @@ export default function InstagramGrid() {
           <h2
             className="text-[var(--color-ink)]"
             style={{
-              fontFamily: '"Cormorant Garamond", serif',
+              fontFamily: '"Playfair Display", serif',
               fontWeight: 300,
               fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
             }}
@@ -59,7 +59,7 @@ export default function InstagramGrid() {
             >
               <img
                 src={`https://picsum.photos/seed/${seed}/300/300`}
-                alt="Muskaan boutique — customer styling"
+                alt="Muskaan boutique â€” customer styling"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
               />

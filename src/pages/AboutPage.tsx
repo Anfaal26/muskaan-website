@@ -1,10 +1,10 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import PageWrapper from '../components/layout/PageWrapper';
 
 const timeline = [
-  { year: '2007', event: 'Founded', detail: 'Muskaan opens its doors in Dhaka — a single room, a rack of hand-selected sarees, and a dream.' },
+  { year: '2007', event: 'Founded', detail: 'Muskaan opens its doors in Dhaka â€” a single room, a rack of hand-selected sarees, and a dream.' },
   { year: '2012', event: 'Growing Family', detail: 'We expand to a proper boutique space, welcoming artisan collaborations from across Bangladesh and India.' },
-  { year: '2018', event: 'Going Online', detail: 'Our first online orders. Customers from across Bangladesh — and the diaspora abroad — discover Muskaan.' },
+  { year: '2018', event: 'Going Online', detail: 'Our first online orders. Customers from across Bangladesh â€” and the diaspora abroad â€” discover Muskaan.' },
   { year: '2023', event: 'New Collection', detail: 'Launch of our indo-western fusion line, honouring tradition while speaking to a modern woman.' },
   { year: '2025', event: 'Today', detail: 'Over 10,000 pieces curated. Still family-run. Still choosing every garment with love.' },
 ];
@@ -16,9 +16,9 @@ const team = [
 ];
 
 const values = [
-  { icon: '✦', title: 'Quality', body: 'We source only fabrics and craftsmanship we would wear ourselves. No compromises.' },
-  { icon: '❧', title: 'Heritage', body: 'Every piece celebrates South Asian textile traditions — Jamdani, chikankari, zardozi, and more.' },
-  { icon: '♡', title: 'Love', body: 'Muskaan means smile. That warmth is in every garment, every package, every interaction.' },
+  { icon: 'âœ¦', title: 'Quality', body: 'We source only fabrics and craftsmanship we would wear ourselves. No compromises.' },
+  { icon: 'â§', title: 'Heritage', body: 'Every piece celebrates South Asian textile traditions â€” Jamdani, chikankari, zardozi, and more.' },
+  { icon: 'â™¡', title: 'Love', body: 'Muskaan means smile. That warmth is in every garment, every package, every interaction.' },
 ];
 
 export default function AboutPage() {
@@ -38,7 +38,7 @@ export default function AboutPage() {
           <p
             className="text-white leading-tight"
             style={{
-              fontFamily: '"Cormorant Garamond", serif',
+              fontFamily: '"Playfair Display", serif',
               fontWeight: 300,
               fontSize: 'clamp(1.8rem, 4vw, 3.2rem)',
             }}
@@ -49,7 +49,7 @@ export default function AboutPage() {
             className="block mt-6 text-sm not-italic"
             style={{ color: 'var(--color-gold)', fontFamily: '"DM Mono", monospace' }}
           >
-            — Nasrin Akter, Founder
+            â€” Nasrin Akter, Founder
           </cite>
         </motion.blockquote>
       </section>
@@ -62,7 +62,7 @@ export default function AboutPage() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           className="text-center text-[var(--color-ink)] mb-14"
-          style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: '2.5rem' }}
+          style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300, fontSize: '2.5rem' }}
         >
           Our Journey
         </motion.h2>
@@ -94,7 +94,7 @@ export default function AboutPage() {
                   </span>
                   <h3
                     className="text-lg text-[var(--color-ink)]"
-                    style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 400 }}
+                    style={{ fontFamily: '"Playfair Display", serif', fontWeight: 400 }}
                   >
                     {item.event}
                   </h3>
@@ -116,7 +116,7 @@ export default function AboutPage() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           className="text-center text-[var(--color-ink)] mb-14"
-          style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: '2.5rem' }}
+          style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300, fontSize: '2.5rem' }}
         >
           Meet the Family
         </motion.h2>
@@ -145,7 +145,7 @@ export default function AboutPage() {
               <div>
                 <p
                   className="text-lg text-[var(--color-ink)]"
-                  style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 400 }}
+                  style={{ fontFamily: '"Playfair Display", serif', fontWeight: 400 }}
                 >
                   {member.name}
                 </p>
@@ -164,7 +164,7 @@ export default function AboutPage() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           className="text-center text-[var(--color-ink)] mb-14"
-          style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: '2.5rem' }}
+          style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300, fontSize: '2.5rem' }}
         >
           What We Stand For
         </motion.h2>
@@ -189,7 +189,7 @@ export default function AboutPage() {
               </span>
               <h3
                 className="text-xl text-[var(--color-ink)]"
-                style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 400 }}
+                style={{ fontFamily: '"Playfair Display", serif', fontWeight: 400 }}
               >
                 {v.title}
               </h3>

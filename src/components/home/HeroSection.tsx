@@ -7,93 +7,71 @@ const headline = ['Wear the Story', 'of a Thousand', 'Threads.'];
 export default function HeroSection() {
   return (
     <section
-      className="relative min-h-[calc(100vh-4rem)] flex items-center overflow-hidden dot-bg"
+      className="relative min-h-[calc(100vh-4rem)] flex items-center overflow-hidden"
       aria-label="Hero"
     >
-      <div className="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-12 py-16 items-center">
-        {/* Text */}
-        <div className="flex flex-col gap-8 z-10">
-          <div aria-live="polite">
-            {headline.map((line, i) => (
-              <motion.h1
-                key={line}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1 + i * 0.18, ease: [0.22, 1, 0.36, 1] }}
-                className="leading-[1.05] text-[var(--color-ink)]"
-                style={{
-                  fontFamily: '"Cormorant Garamond", serif',
-                  fontWeight: 300,
-                  fontSize: 'clamp(2.6rem, 5vw, 4.5rem)',
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                {line}
-              </motion.h1>
-            ))}
-          </div>
+      {/* Full-bleed boutique photo */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/hero-boutique.webp"
+          alt="Muskaan Boutique interior — Dhaka's premier ethnic wear destination"
+          className="w-full h-full object-cover"
+          loading="eager"
+        />
+        {/* Dark overlay so text is legible */}
+        <div className="absolute inset-0" style={{ background: 'rgba(20,16,12,0.52)' }} aria-hidden="true" />
+      </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.55 }}
-            className="text-base text-[var(--color-ink-muted)] max-w-md leading-relaxed"
-          >
-            Handpicked ethnic wear for women who carry culture with elegance.
-            Dhaka's boutique since 2007.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.72 }}
-            className="flex items-center gap-5 flex-wrap"
-          >
-            <Link to="/shop">
-              <Button variant="primary" size="lg">Shop the Collection</Button>
-            </Link>
-            <Link
-              to="/about"
-              className="text-sm text-[var(--color-ink)] underline-offset-4 hover:underline hover:text-[var(--color-gold)] transition-colors"
+      {/* Text — centred over the photo */}
+      <div className="relative z-10 w-full flex flex-col items-center text-center px-6 py-20">
+        <div aria-live="polite" className="mb-6">
+          {headline.map((line, i) => (
+            <motion.h1
+              key={line}
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.12 + i * 0.18, ease: [0.22, 1, 0.36, 1] }}
+              className="leading-[1.08] text-white"
+              style={{
+                fontFamily: '"Playfair Display", serif',
+                fontWeight: 500,
+                fontSize: 'clamp(2.8rem, 6vw, 5rem)',
+                letterSpacing: '-0.01em',
+                textShadow: '0 2px 24px rgba(0,0,0,0.4)',
+              }}
             >
-              Our Story →
-            </Link>
-          </motion.div>
+              {line}
+            </motion.h1>
+          ))}
         </div>
 
-        {/* Image card */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="hidden lg:flex justify-center"
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="text-base max-w-md leading-relaxed mb-10"
+          style={{ color: 'rgba(255,255,255,0.82)' }}
         >
-          <div
-            className="relative rounded-sm overflow-hidden shadow-xl"
-            style={{
-              width: '80%',
-              maxWidth: 400,
-              aspectRatio: '3/4',
-              border: '1.5px solid var(--color-gold)',
-              background: 'var(--color-border)',
-            }}
+          Handpicked ethnic wear for women who carry culture with elegance.
+          Dhaka's boutique since 2007.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.78 }}
+          className="flex items-center gap-5 flex-wrap justify-center"
+        >
+          <Link to="/shop">
+            <Button variant="primary" size="lg">Shop the Collection</Button>
+          </Link>
+          <Link
+            to="/shop/new-arrivals"
+            className="text-sm underline-offset-4 hover:underline transition-colors"
+            style={{ color: 'var(--color-gold)' }}
           >
-            <img
-              src="https://picsum.photos/seed/muskaan-hero/400/533"
-              alt="Muskaan boutique fashion — a woman in a beautiful saree"
-              className="w-full h-full object-cover"
-              loading="eager"
-            />
-            {/* Gold corner accent */}
-            <div
-              className="absolute bottom-0 right-0 w-12 h-12"
-              style={{
-                background: 'linear-gradient(135deg, transparent 50%, var(--color-gold) 50%)',
-                opacity: 0.6,
-              }}
-              aria-hidden="true"
-            />
-          </div>
+            New Arrivals →
+          </Link>
         </motion.div>
       </div>
     </section>

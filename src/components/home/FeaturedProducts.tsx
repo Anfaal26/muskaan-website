@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+﻿import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { featuredProducts } from '../../data/products';
@@ -25,7 +25,7 @@ export default function FeaturedProducts() {
           <h2
             className="text-[var(--color-ink)]"
             style={{
-              fontFamily: '"Cormorant Garamond", serif',
+              fontFamily: '"Playfair Display", serif',
               fontWeight: 300,
               fontSize: 'clamp(2rem, 4vw, 3rem)',
             }}

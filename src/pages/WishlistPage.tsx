@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { Heart, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useWishlistStore } from '../store/wishlistStore';
@@ -20,7 +20,7 @@ export default function WishlistPage() {
           <Heart size={64} className="text-[var(--color-border)]" aria-hidden="true" />
           <h1
             className="text-[var(--color-ink)]"
-            style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: '2.5rem' }}
+            style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300, fontSize: '2.5rem' }}
           >
             Your wishlist is empty
           </h1>
@@ -28,7 +28,7 @@ export default function WishlistPage() {
             Save pieces you love by tapping the heart icon on any product. They'll wait here for you.
           </p>
           <Link to="/shop">
-            <Button variant="primary" size="lg">Discover the Collection →</Button>
+            <Button variant="primary" size="lg">Discover the Collection â†’</Button>
           </Link>
         </div>
       </PageWrapper>
@@ -48,7 +48,7 @@ export default function WishlistPage() {
           </Link>
           <h1
             className="text-[var(--color-ink)]"
-            style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300, fontSize: '2rem' }}
+            style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300, fontSize: '2rem' }}
           >
             Wishlist
             <span className="ml-3 text-lg text-[var(--color-ink-muted)]">({items.length})</span>
@@ -129,7 +129,7 @@ export default function WishlistPage() {
                   <Link
                     to={`/product/${product.slug}`}
                     className="text-sm text-[var(--color-ink)] hover:text-[var(--color-gold)] transition-colors line-clamp-1"
-                    style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '1rem' }}
+                    style={{ fontFamily: '"Playfair Display", serif', fontSize: '1rem' }}
                   >
                     {product.name}
                   </Link>
@@ -139,7 +139,7 @@ export default function WishlistPage() {
                         className="text-xs line-through text-[var(--color-ink-muted)]"
                         style={{ fontFamily: '"DM Mono", monospace' }}
                       >
-                        ৳{product.originalPrice.toLocaleString()}
+                        à§³{product.originalPrice.toLocaleString()}
                       </span>
                     )}
                     <span
@@ -149,7 +149,7 @@ export default function WishlistPage() {
                         color: product.originalPrice ? 'var(--color-terracotta)' : 'var(--color-ink)',
                       }}
                     >
-                      ৳{product.price.toLocaleString()}
+                      à§³{product.price.toLocaleString()}
                     </span>
                   </div>
                 </div>

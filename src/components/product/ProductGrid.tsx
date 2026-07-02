@@ -1,4 +1,4 @@
-import ProductCard from './ProductCard';
+﻿import ProductCard from './ProductCard';
 import type { Product } from '../../types';
 
 interface ProductGridProps {
@@ -34,10 +34,10 @@ export default function ProductGrid({ products, loading, emptyMessage }: Product
   if (!products.length) {
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-4 text-center">
-        <div className="text-6xl">🧵</div>
+        <div className="text-6xl">ðŸ§µ</div>
         <h3
           className="text-2xl text-[var(--color-ink)]"
-          style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 300 }}
+          style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300 }}
         >
           Nothing here yet
         </h3>
