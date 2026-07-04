@@ -1,4 +1,4 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '../store/cartStore';
@@ -11,14 +11,14 @@ const SHIPPING_THRESHOLD = 2000;
 const SHIPPING_COST = 150;
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, clearCart, total } = useCartStore();
+  const { items, removeItem, updateQuantity, clearCart, checkoutUrl } = useCartStore();
   const { show } = useToast();
-  const subtotal = total();
+  const subtotal = items.reduce((sum, i) => sum + (i.product.price ?? 0) * i.quantity, 0);
   const shipping = subtotal >= SHIPPING_THRESHOLD ? 0 : items.length ? SHIPPING_COST : 0;
   const orderTotal = subtotal + shipping;
 
   const handleCheckout = () => {
-    show('Checkout coming soon â€” stay tuned! ðŸŽ‰', 'info');
+    window.open(checkoutUrl(), '_blank', 'noopener,noreferrer');
   };
 
   if (!items.length) {
@@ -36,7 +36,7 @@ export default function CartPage() {
             Looks like you haven't added anything yet. Explore our collection and find something beautiful.
           </p>
           <Link to="/shop">
-            <Button variant="primary" size="lg">Start Shopping â†’</Button>
+            <Button variant="primary" size="lg">Start Shopping &rarr;</Button>
           </Link>
         </div>
       </PageWrapper>
@@ -75,102 +75,102 @@ export default function CartPage() {
             </div>
 
             <div className="divide-y divide-[var(--color-border)]">
-              {items.map(item => (
-                <motion.div
-                  key={`${item.product.id}-${item.selectedSize}`}
-                  layout
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="py-6 grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_auto] gap-4 items-center"
-                >
-                  {/* Product info */}
-                  <div className="flex gap-4 items-start">
-                    <Link
-                      to={`/product/${item.product.slug}`}
-                      className="shrink-0 rounded-sm overflow-hidden"
-                      style={{ width: 80, aspectRatio: '3/4', background: 'var(--color-border)' }}
-                    >
-                      <img
-                        src={item.product.images[0]}
-                        alt={item.product.name}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </Link>
-                    <div className="flex flex-col gap-1">
-                      <Link
-                        to={`/product/${item.product.slug}`}
-                        className="text-sm text-[var(--color-ink)] hover:text-[var(--color-gold)] transition-colors"
-                        style={{ fontFamily: '"Playfair Display", serif', fontSize: '1rem' }}
-                      >
-                        {item.product.name}
-                      </Link>
-                      <span className="text-xs text-[var(--color-ink-muted)]">Size: {item.selectedSize}</span>
-                      {item.selectedColor && (
-                        <span className="flex items-center gap-1.5 text-xs text-[var(--color-ink-muted)]">
-                          <span
-                            className="w-3 h-3 rounded-full border border-[var(--color-border)] inline-block"
-                            style={{ background: item.selectedColor }}
-                            aria-hidden="true"
-                          />
-                          Color
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Quantity */}
-                  <div
-                    className="flex items-center justify-center border border-[var(--color-border)] rounded-sm w-fit mx-auto"
-                    role="group"
-                    aria-label={`Quantity for ${item.product.name}`}
+              {items.map(item => {
+                const label = item.product.label ?? 'Product';
+                return (
+                  <motion.div
+                    key={item.product.id}
+                    layout
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="py-6 grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_auto] gap-4 items-center"
                   >
-                    <button
-                      type="button"
-                      onClick={() => updateQuantity(item.product.id, item.selectedSize, item.quantity - 1)}
-                      className="w-9 h-9 flex items-center justify-center text-[var(--color-ink-muted)] hover:bg-[var(--color-border)] cursor-pointer transition-colors text-lg leading-none"
-                      aria-label="Decrease"
+                    {/* Product info */}
+                    <div className="flex gap-4 items-start">
+                      <Link
+                        to={`/product/${item.product.id}`}
+                        className="shrink-0 rounded-sm overflow-hidden"
+                        style={{ width: 80, aspectRatio: '3/4', background: 'var(--color-border)' }}
+                      >
+                        <img
+                          src={item.product.image_url}
+                          alt={label}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </Link>
+                      <div className="flex flex-col gap-1">
+                        <Link
+                          to={`/product/${item.product.id}`}
+                          className="text-sm text-[var(--color-ink)] hover:text-[var(--color-gold)] transition-colors"
+                          style={{ fontFamily: '"Playfair Display", serif', fontSize: '1rem' }}
+                        >
+                          {label}
+                        </Link>
+                        {item.product.category && (
+                          <span className="text-xs text-[var(--color-ink-muted)] capitalize">
+                            {item.product.category}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Quantity */}
+                    <div
+                      className="flex items-center justify-center border border-[var(--color-border)] rounded-sm w-fit mx-auto"
+                      role="group"
+                      aria-label={`Quantity for ${label}`}
                     >
-                      âˆ’
-                    </button>
-                    <span
-                      className="w-10 text-center text-sm text-[var(--color-ink)]"
+                      <button
+                        type="button"
+                        onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                        className="w-9 h-9 flex items-center justify-center text-[var(--color-ink-muted)] hover:bg-[var(--color-border)] cursor-pointer transition-colors text-lg leading-none"
+                        aria-label="Decrease"
+                      >
+                        &minus;
+                      </button>
+                      <span
+                        className="w-10 text-center text-sm text-[var(--color-ink)]"
+                        style={{ fontFamily: '"DM Mono", monospace' }}
+                      >
+                        {item.quantity}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                        className="w-9 h-9 flex items-center justify-center text-[var(--color-ink-muted)] hover:bg-[var(--color-border)] cursor-pointer transition-colors text-lg leading-none"
+                        aria-label="Increase"
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    {/* Line total */}
+                    <div
+                      className="text-sm font-medium text-right text-[var(--color-ink)]"
                       style={{ fontFamily: '"DM Mono", monospace' }}
                     >
-                      {item.quantity}
-                    </span>
+                      {item.product.price != null
+                        ? `&#2547;${(item.product.price * item.quantity).toLocaleString()}`
+                        : <span className="text-[var(--color-ink-muted)] text-xs">Contact for pricing</span>
+                      }
+                    </div>
+
+                    {/* Remove */}
                     <button
                       type="button"
-                      onClick={() => updateQuantity(item.product.id, item.selectedSize, item.quantity + 1)}
-                      className="w-9 h-9 flex items-center justify-center text-[var(--color-ink-muted)] hover:bg-[var(--color-border)] cursor-pointer transition-colors text-lg leading-none"
-                      aria-label="Increase"
+                      onClick={() => {
+                        removeItem(item.product.id);
+                        show('Item removed from cart', 'info');
+                      }}
+                      className="p-2 text-[var(--color-ink-muted)] hover:text-[var(--color-terracotta)] cursor-pointer transition-colors justify-self-end"
+                      aria-label={`Remove ${label}`}
                     >
-                      +
+                      <Trash2 size={15} aria-hidden="true" />
                     </button>
-                  </div>
-
-                  {/* Line total */}
-                  <div
-                    className="text-sm font-medium text-right text-[var(--color-ink)]"
-                    style={{ fontFamily: '"DM Mono", monospace' }}
-                  >
-                    à§³{(item.product.price * item.quantity).toLocaleString()}
-                  </div>
-
-                  {/* Remove */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      removeItem(item.product.id, item.selectedSize);
-                      show('Item removed from cart', 'info');
-                    }}
-                    className="p-2 text-[var(--color-ink-muted)] hover:text-[var(--color-terracotta)] cursor-pointer transition-colors justify-self-end"
-                    aria-label={`Remove ${item.product.name}`}
-                  >
-                    <Trash2 size={15} aria-hidden="true" />
-                  </button>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
 
             <button
@@ -197,20 +197,20 @@ export default function CartPage() {
 
             <div className="flex justify-between text-sm text-[var(--color-ink-muted)]">
               <span>Subtotal</span>
-              <span style={{ fontFamily: '"DM Mono", monospace' }}>à§³{subtotal.toLocaleString()}</span>
+              <span style={{ fontFamily: '"DM Mono", monospace' }}>&#2547;{subtotal.toLocaleString()}</span>
             </div>
 
             <div className="flex justify-between text-sm text-[var(--color-ink-muted)]">
               <span>Shipping</span>
               <span style={{ fontFamily: '"DM Mono", monospace' }}>
-                {shipping === 0 ? (items.length ? 'Free ðŸŽ‰' : 'â€”') : `à§³${shipping}`}
+                {shipping === 0 ? (items.length ? 'Free' : '—') : `৳${shipping}`}
               </span>
             </div>
 
             {subtotal > 0 && subtotal < SHIPPING_THRESHOLD && (
               <p className="text-xs text-[var(--color-ink-muted)] bg-[var(--color-bg)] rounded-sm px-3 py-2">
                 Add <strong style={{ color: 'var(--color-gold)', fontFamily: '"DM Mono",monospace' }}>
-                  à§³{(SHIPPING_THRESHOLD - subtotal).toLocaleString()}
+                  &#2547;{(SHIPPING_THRESHOLD - subtotal).toLocaleString()}
                 </strong> more for free shipping
               </p>
             )}
@@ -226,15 +226,15 @@ export default function CartPage() {
               style={{ borderColor: 'var(--color-border)' }}
             >
               <span>Total</span>
-              <span style={{ fontFamily: '"DM Mono", monospace' }}>à§³{orderTotal.toLocaleString()}</span>
+              <span style={{ fontFamily: '"DM Mono", monospace' }}>&#2547;{orderTotal.toLocaleString()}</span>
             </div>
 
             <Button variant="primary" fullWidth size="lg" onClick={handleCheckout}>
-              Proceed to Checkout
+              Enquire on Messenger
             </Button>
 
             <p className="text-xs text-center text-[var(--color-ink-muted)]">
-              Secure checkout Â· Free returns within 7 days
+              Secure checkout &middot; Free returns within 7 days
             </p>
           </aside>
         </div>

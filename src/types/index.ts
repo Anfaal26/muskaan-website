@@ -60,3 +60,39 @@ export type SortOption = 'newest' | 'oldest' | 'price-asc' | 'price-desc';
 export type CategorySlug = 'products' | 'new-arrivals';
 export type SizeOption = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL';
 export type BadgeType = 'new' | 'sale' | 'low-stock';
+
+export interface Category {
+  slug: string;
+  name: string;
+  description: string;
+  productCount: number;
+  color: string;
+}
+
+export interface Product {
+  id: string;
+  slug: string;
+  name: string;
+  category: string;
+  price: number;
+  description: string;
+  fabric?: string;
+  occasion?: string[];
+  colors?: string[];
+  sizes?: string[];
+  images: string[];
+  badge?: BadgeType;
+  rating?: number;
+  reviewCount?: number;
+  inStock?: boolean;
+  featured?: boolean;
+}
+
+export interface Review {
+  id: string;
+  reviewerName: string;
+  rating: number;
+  comment: string;
+  garmentPurchased?: string;
+  date?: string;
+}

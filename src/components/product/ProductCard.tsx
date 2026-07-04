@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '../../store/cartStore';
 import { useToast } from '../../hooks/useToast';
