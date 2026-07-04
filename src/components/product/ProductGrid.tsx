@@ -1,8 +1,8 @@
 ﻿import ProductCard from './ProductCard';
-import type { Product } from '../../types';
+import type { DbProduct } from '../../types';
 
 interface ProductGridProps {
-  products: Product[];
+  products: DbProduct[];
   loading?: boolean;
   emptyMessage?: string;
 }
@@ -34,7 +34,7 @@ export default function ProductGrid({ products, loading, emptyMessage }: Product
   if (!products.length) {
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-4 text-center">
-        <div className="text-6xl">ðŸ§µ</div>
+        <div className="text-6xl" aria-hidden="true">&#x1F9F5;</div>
         <h3
           className="text-2xl text-[var(--color-ink)]"
           style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300 }}

@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Search, Heart, ShoppingBag, Menu, X } from 'lucide-react';
+import { Search, Heart, ShoppingBag, Menu, X, Shield, LayoutDashboard, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '../../store/cartStore';
 import { useWishlistStore } from '../../store/wishlistStore';
+import { useAdminContext } from '../../contexts/AdminContext';
 
 const navLinks = [
   { label: 'Products', to: '/shop' },
@@ -15,15 +16,29 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchVal, setSearchVal] = useState('');
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+  const adminMenuRef = useRef<HTMLDivElement>(null);
+
   const itemCount = useCartStore(s => s.itemCount());
   const wishlistCount = useWishlistStore(s => s.items.length);
   const openCart = useCartStore(s => s.openDrawer);
   const navigate = useNavigate();
+  const { isAdmin, username, clearAdmin } = useAdminContext();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', handler, { passive: true });
     return () => window.removeEventListener('scroll', handler);
+  }, []);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (adminMenuRef.current && !adminMenuRef.current.contains(e.target as Node)) {
+        setAdminMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -34,6 +49,13 @@ export default function Navbar() {
       setSearchVal('');
     }
   };
+
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    clearAdmin();
+    setAdminMenuOpen(false);
+    navigate('/');
+  }
 
   return (
     <>
@@ -46,16 +68,10 @@ export default function Navbar() {
         }}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center h-16 gap-6">
-          {/* Logo */}
           <Link to="/" aria-label="Muskaan Boutique — go to homepage" className="shrink-0">
-            <img
-              src="/logo.jpg"
-              alt="Muskaan Boutique"
-              className="h-10 w-auto object-contain"
-            />
+            <img src="/logo.jpg" alt="Muskaan Boutique" className="h-10 w-auto object-contain" />
           </Link>
 
-          {/* Desktop nav */}
           <div className="hidden lg:flex items-center gap-7 flex-1 justify-center">
             {navLinks.map(l => (
               <NavLink
@@ -72,9 +88,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-3 ml-auto">
-            {/* Search */}
             <AnimatePresence>
               {searchOpen ? (
                 <motion.form
@@ -139,7 +153,50 @@ export default function Navbar() {
               )}
             </button>
 
-            {/* Mobile hamburger */}
+            {/* Admin icon — shown only when logged in */}
+            {isAdmin && (
+              <div ref={adminMenuRef} className="relative">
+                <button
+                  type="button"
+                  onClick={() => setAdminMenuOpen(o => !o)}
+                  className="p-2 text-[var(--color-ink)] hover:text-[var(--color-gold)] cursor-pointer transition-colors"
+                  aria-label="Admin menu"
+                  title={`Logged in as ${username ?? 'admin'}`}
+                >
+                  <Shield size={18} aria-hidden="true" />
+                </button>
+                <AnimatePresence>
+                  {adminMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 top-full mt-2 w-48 rounded-sm shadow-lg border overflow-hidden"
+                      style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+                    >
+                      <Link
+                        to="/admin/dashboard"
+                        onClick={() => setAdminMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-3 text-sm text-[var(--color-ink)] hover:bg-[var(--color-border)] transition-colors"
+                      >
+                        <LayoutDashboard size={14} aria-hidden="true" />
+                        Dashboard
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-2.5 px-4 py-3 text-sm text-[var(--color-ink)] hover:bg-[var(--color-border)] transition-colors cursor-pointer"
+                      >
+                        <LogOut size={14} aria-hidden="true" />
+                        Logout
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
+
             <button
               type="button"
               className="lg:hidden p-2 text-[var(--color-ink)] hover:text-[var(--color-gold)] cursor-pointer transition-colors"
@@ -153,7 +210,6 @@ export default function Navbar() {
         </nav>
       </header>
 
-      {/* Mobile menu overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -183,6 +239,18 @@ export default function Navbar() {
                   </NavLink>
                 </motion.div>
               ))}
+              {isAdmin && (
+                <motion.div initial={{ opacity: 0, x: -24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: navLinks.length * 0.07 }}>
+                  <NavLink
+                    to="/admin/dashboard"
+                    onClick={() => setMobileOpen(false)}
+                    className="block py-4 border-b border-[var(--color-border)] font-display text-3xl font-light text-[var(--color-ink)] hover:text-[var(--color-gold)] transition-colors"
+                    style={{ fontFamily: '"Playfair Display", serif' }}
+                  >
+                    Admin
+                  </NavLink>
+                </motion.div>
+              )}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -205,7 +273,6 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Spacer so content doesn't hide behind fixed nav */}
       <div className="h-16" aria-hidden="true" />
     </>
   );

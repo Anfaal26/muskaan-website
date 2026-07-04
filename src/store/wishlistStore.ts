@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Product } from '../types';
+import type { DbProduct } from '../types';
 
 interface WishlistState {
-  items: Product[];
-  toggle: (product: Product) => void;
+  items: DbProduct[];
+  toggle: (product: DbProduct) => void;
   isWishlisted: (productId: string) => boolean;
   clear: () => void;
 }

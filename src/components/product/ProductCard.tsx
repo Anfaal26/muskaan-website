@@ -1,40 +1,30 @@
-﻿import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Heart, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '../../store/cartStore';
-import { useWishlistStore } from '../../store/wishlistStore';
 import { useToast } from '../../hooks/useToast';
-import Badge from '../ui/Badge';
-import type { Product } from '../../types';
+import type { DbProduct } from '../../types';
+
+const FB_USERNAME = import.meta.env.VITE_FACEBOOK_PAGE_USERNAME ?? 'muskaan020';
 
 interface ProductCardProps {
-  product: Product;
+  product: DbProduct;
   index?: number;
 }
 
 export default function ProductCard({ product, index = 0 }: ProductCardProps) {
-  const { toggle, isWishlisted } = useWishlistStore();
-  const { addItem, openDrawer } = useCartStore();
+  const addToCart = useCartStore(s => s.addItem);
+  const openCart = useCartStore(s => s.openDrawer);
   const { show } = useToast();
-  const wishlisted = isWishlisted(product.id);
 
-  const handleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    toggle(product);
-    show(
-      wishlisted ? 'Removed from wishlist' : 'Added to wishlist â™¡',
-      wishlisted ? 'info' : 'success'
-    );
-  };
+  const label = product.label ?? 'Latest Collection';
 
-  const handleQuickAdd = (e: React.MouseEvent) => {
+  function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
-    const defaultSize = product.sizes[1] ?? product.sizes[0];
-    const defaultColor = product.colors[0];
-    addItem(product, defaultSize, defaultColor);
-    show(`${product.name} added to cart`, 'success');
-    openDrawer();
-  };
+    addToCart(product);
+    openCart();
+    show(`${label} added to bag`, 'success');
+  }
 
   return (
     <motion.div
@@ -43,99 +33,71 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
     >
-      <Link
-        to={`/product/${product.slug}`}
-        className="group block relative"
-        aria-label={`View ${product.name}`}
-      >
+      <Link to={`/product/${product.id}`} className="group block relative" aria-label={`View ${label}`}>
         {/* Image container */}
-        <div
-          className="relative overflow-hidden rounded-sm"
-          style={{ aspectRatio: '3/4', background: 'var(--color-border)' }}
-        >
-          {/* Badge */}
-          {product.badge && (
-            <div className="absolute top-3 left-3 z-10">
-              <Badge variant={product.badge} />
-            </div>
-          )}
+        <div className="relative overflow-hidden rounded-sm" style={{ aspectRatio: '3/4', background: 'var(--color-border)' }}>
+          <img
+            src={product.image_url}
+            alt={label}
+            loading="lazy"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
 
-          {/* Wishlist */}
-          <button
-            type="button"
-            onClick={handleWishlist}
-            className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center cursor-pointer transition-transform duration-150 hover:scale-110"
-            aria-label={wishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
-          >
-            <Heart
-              size={14}
-              aria-hidden="true"
-              style={{ fill: wishlisted ? 'var(--color-terracotta)' : 'none', color: wishlisted ? 'var(--color-terracotta)' : 'var(--color-ink)' }}
-            />
-          </button>
-
-          {/* Images */}
-          <div className="img-hover-swap w-full h-full">
-            <img
-              src={product.images[0]}
-              alt={product.name}
-              loading="lazy"
-              className="w-full h-full object-cover"
-            />
-            {product.images[1] && (
-              <img
-                src={product.images[1]}
-                alt={`${product.name} â€” alternate view`}
-                loading="lazy"
-                className="w-full h-full object-cover"
-              />
-            )}
-          </div>
-
-          {/* Quick add â€” slides up on hover */}
-          <div
-            className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-250"
-          >
+          {/* Hover overlay: Add to Bag + Messenger */}
+          <div className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-250 flex">
             <button
               type="button"
-              onClick={handleQuickAdd}
-              className="w-full py-3 flex items-center justify-center gap-2 text-xs font-semibold tracking-widest uppercase cursor-pointer transition-colors duration-150"
-              style={{ background: 'var(--color-ink)', color: 'white' }}
+              onClick={handleAddToCart}
+              className="flex-1 py-3 flex items-center justify-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-white cursor-pointer transition-opacity hover:opacity-90"
+              style={{ background: 'var(--color-ink)' }}
+              aria-label={`Add ${label} to cart`}
             >
-              <ShoppingBag size={14} aria-hidden="true" />
-              Quick Add
+              <ShoppingBag size={13} aria-hidden="true" />
+              Add to Bag
             </button>
+            <a
+              href={`https://m.me/${FB_USERNAME}?text=${encodeURIComponent(`Hi, can I know more about this product? ${product.image_url}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()}
+              className="px-3 flex items-center justify-center cursor-pointer transition-opacity hover:opacity-90"
+              style={{ background: '#0084FF' }}
+              aria-label="Enquire on Messenger"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.477 2 2 6.145 2 11.259c0 2.867 1.44 5.42 3.686 7.09V22l3.37-1.85c.9.248 1.854.38 2.944.38 5.523 0 10-4.145 10-9.27C22 6.145 17.523 2 12 2zm1.09 12.486-2.542-2.71-4.963 2.71 5.455-5.79 2.604 2.71 4.9-2.71-5.454 5.79z" />
+              </svg>
+            </a>
           </div>
         </div>
 
         {/* Info */}
         <div className="mt-3 flex flex-col gap-0.5">
-          <span className="text-[10px] uppercase tracking-widest text-[var(--color-ink-muted)]">{product.category.replace('-', ' ')}</span>
+          <span className="text-[10px] uppercase tracking-widest text-[var(--color-ink-muted)]">
+            {product.category ?? 'Muskaan Boutique'}
+          </span>
           <h3
             className="text-sm text-[var(--color-ink)] group-hover:text-[var(--color-gold)] transition-colors line-clamp-1"
             style={{ fontFamily: '"Playfair Display", serif', fontSize: '1rem', fontWeight: 400 }}
           >
-            {product.name}
+            {label}
           </h3>
-          <div className="flex items-center gap-2 mt-1">
-            {product.originalPrice && (
-              <span
-                className="text-xs line-through text-[var(--color-ink-muted)]"
-                style={{ fontFamily: '"DM Mono", monospace' }}
-              >
-                à§³{product.originalPrice.toLocaleString()}
-              </span>
-            )}
-            <span
-              className="text-sm font-medium"
-              style={{
-                fontFamily: '"DM Mono", monospace',
-                color: product.originalPrice ? 'var(--color-terracotta)' : 'var(--color-ink)',
-              }}
-            >
-              à§³{product.price.toLocaleString()}
+          {product.price != null ? (
+            <span className="text-xs text-[var(--color-ink-muted)]" style={{ fontFamily: '"DM Mono", monospace' }}>
+              &#2547;{product.price.toLocaleString()}
             </span>
-          </div>
+          ) : (
+            <a
+              href={`https://m.me/${FB_USERNAME}?text=${encodeURIComponent('Hi, can I know more about pricing?')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={e => e.stopPropagation()}
+              className="text-xs mt-0.5 hover:underline transition-colors"
+              style={{ color: '#0084FF' }}
+            >
+              Contact for pricing &rarr;
+            </a>
+          )}
         </div>
       </Link>
     </motion.div>

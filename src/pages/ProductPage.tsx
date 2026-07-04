@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Heart, Share2 } from 'lucide-react';
+import { Heart, Share2, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { getProductBySlug, getRelatedProducts } from '../data/products';
+import { useProduct, useProducts } from '../hooks/useProducts';
 import { useWishlistStore } from '../store/wishlistStore';
+import { useCartStore } from '../store/cartStore';
 import { useToast } from '../hooks/useToast';
 import PageWrapper from '../components/layout/PageWrapper';
 import ProductGallery from '../components/product/ProductGallery';
 import ProductGrid from '../components/product/ProductGrid';
 import Button from '../components/ui/Button';
-import Badge from '../components/ui/Badge';
+
+const FB_USERNAME = import.meta.env.VITE_FACEBOOK_PAGE_USERNAME ?? 'muskaan020';
 
 function MessengerIcon() {
   return (
@@ -19,11 +21,30 @@ function MessengerIcon() {
   );
 }
 
+function RelatedProducts({ category, excludeId }: { category: string | null; excludeId: string }) {
+  const { data: all = [] } = useProducts(category ?? undefined);
+  const related = all.filter(p => p.id !== excludeId).slice(0, 4);
+  if (!related.length) return null;
+  return (
+    <section className="mt-20">
+      <h2
+        className="text-[var(--color-ink)] mb-8"
+        style={{ fontFamily: '"Playfair Display", serif', fontWeight: 400, fontSize: 'clamp(1.6rem,3vw,2.4rem)' }}
+      >
+        You May Also Like
+      </h2>
+      <ProductGrid products={related} />
+    </section>
+  );
+}
+
 export default function ProductPage() {
-  const { slug } = useParams<{ slug: string }>();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const product = slug ? getProductBySlug(slug) : undefined;
+  const { data: product, isLoading, isError } = useProduct(id);
   const { toggle, isWishlisted } = useWishlistStore();
+  const addToCart = useCartStore(s => s.addItem);
+  const openCart = useCartStore(s => s.openDrawer);
   const { show } = useToast();
 
   useEffect(() => {
@@ -31,77 +52,108 @@ export default function ProductPage() {
   }, [product]);
 
   useEffect(() => {
-    if (slug && !product) navigate('/shop', { replace: true });
-  }, [slug, product, navigate]);
+    if (isError) navigate('/shop', { replace: true });
+  }, [isError, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--color-bg)' }}>
+        <div className="w-8 h-8 border-2 rounded-full animate-spin" style={{ borderColor: 'var(--color-border)', borderTopColor: 'var(--color-gold)' }} />
+      </div>
+    );
+  }
 
   if (!product) return null;
 
+  const label = product.label ?? 'Latest Collection';
   const wishlisted = isWishlisted(product.id);
-  const related = getRelatedProducts(product);
+  const messengerUrl = `https://m.me/${FB_USERNAME}?text=${encodeURIComponent(`Hi, I'm interested in this product: ${product.image_url}`)}`;
 
   const handleWishlist = () => {
     toggle(product);
-    show(wishlisted ? 'Removed from wishlist' : 'Added to wishlist ♡', wishlisted ? 'info' : 'success');
+    show(wishlisted ? 'Removed from wishlist' : 'Added to wishlist', wishlisted ? 'info' : 'success');
+  };
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    openCart();
+    show(`${label} added to bag`, 'success');
   };
 
   return (
     <PageWrapper dotPattern="sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-        {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-xs text-[var(--color-ink-muted)] mb-8" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-[var(--color-gold)] transition-colors">Home</Link>
           <span aria-hidden="true">/</span>
           <Link to="/shop" className="hover:text-[var(--color-gold)] transition-colors">Products</Link>
           <span aria-hidden="true">/</span>
-          <span className="text-[var(--color-ink)] truncate max-w-[200px]">{product.name}</span>
+          <span className="text-[var(--color-ink)] truncate max-w-[200px]">{label}</span>
         </nav>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* Gallery */}
           <ProductGallery product={product} />
 
-          {/* Info panel */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="flex flex-col gap-5"
           >
-            {/* Badge */}
-            <div className="flex items-center gap-3">
-              {product.badge && <Badge variant={product.badge} />}
-            </div>
+            {product.category && (
+              <span className="text-[10px] uppercase tracking-widest text-[var(--color-ink-muted)]">
+                {product.category}
+              </span>
+            )}
 
-            {/* Name */}
             <h1
               className="text-[var(--color-ink)] leading-tight"
               style={{ fontFamily: '"Playfair Display", serif', fontWeight: 500, fontSize: 'clamp(1.8rem,3vw,2.6rem)' }}
             >
-              {product.name}
+              {label}
             </h1>
 
-            {/* Rating */}
-            <div className="flex items-center gap-2 text-sm text-[var(--color-ink-muted)]">
-              <span style={{ color: 'var(--color-gold)' }}>{'★'.repeat(Math.floor(product.rating))}</span>
-              <span style={{ fontFamily: '"DM Mono",monospace' }}>{product.rating}</span>
-              <span>({product.reviewCount} reviews)</span>
-            </div>
+            {product.price != null ? (
+              <p className="text-xl font-medium" style={{ fontFamily: '"DM Mono",monospace', color: 'var(--color-ink)' }}>
+                &#2547;{product.price.toLocaleString()}
+              </p>
+            ) : (
+              <a
+                href={messengerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium hover:underline"
+                style={{ color: '#0084FF' }}
+              >
+                Contact for pricing &rarr;
+              </a>
+            )}
 
-            {/* Description */}
+            {product.description && (
+              <p className="text-sm text-[var(--color-ink-muted)] leading-relaxed">
+                {product.description}
+              </p>
+            )}
+
             <p className="text-sm text-[var(--color-ink-muted)] leading-relaxed">
-              This is a handpicked piece from Muskaan Boutique, Dhaka's premier destination for South Asian ethnic wear since 2007.
-              Each garment is carefully selected for quality and craftsmanship. Visit us in-store or message us on Messenger to enquire about availability, fabric details, and pricing.
+              A handpicked piece from Muskaan Boutique, Dhaka's premier destination for South Asian ethnic wear.
+              Message us on Messenger to enquire about availability and fabric details.
             </p>
 
             <hr style={{ borderColor: 'var(--color-border)' }} />
 
-            {/* CTAs */}
             <div className="flex flex-col gap-3 pt-1">
-              <a
-                href="https://m.me/muskaan020"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Button
+                variant="primary"
+                size="lg"
+                fullWidth
+                onClick={handleAddToCart}
+                icon={<ShoppingBag size={16} aria-hidden="true" />}
               >
+                Add to Bag
+              </Button>
+
+              <a href={messengerUrl} target="_blank" rel="noopener noreferrer" className="w-full">
                 <Button
                   variant="primary"
                   size="lg"
@@ -109,21 +161,27 @@ export default function ProductPage() {
                   icon={<MessengerIcon />}
                   style={{ background: '#0084FF', borderColor: '#0084FF' }}
                 >
-                  Order this on Messenger
+                  Enquire on Messenger
                 </Button>
               </a>
+
               <Button
                 variant="ghost"
                 size="lg"
                 fullWidth
                 onClick={handleWishlist}
-                icon={<Heart size={16} style={{ fill: wishlisted ? 'var(--color-terracotta)' : 'none', color: wishlisted ? 'var(--color-terracotta)' : 'inherit' }} aria-hidden="true" />}
+                icon={
+                  <Heart
+                    size={16}
+                    style={{ fill: wishlisted ? 'var(--color-terracotta)' : 'none', color: wishlisted ? 'var(--color-terracotta)' : 'inherit' }}
+                    aria-hidden="true"
+                  />
+                }
               >
                 {wishlisted ? 'Wishlisted' : 'Save to Wishlist'}
               </Button>
             </div>
 
-            {/* Share */}
             <button
               type="button"
               onClick={() => { navigator.clipboard?.writeText(window.location.href); show('Link copied!', 'success'); }}
@@ -135,18 +193,7 @@ export default function ProductPage() {
           </motion.div>
         </div>
 
-        {/* Related products */}
-        {related.length > 0 && (
-          <section className="mt-20">
-            <h2
-              className="text-[var(--color-ink)] mb-8"
-              style={{ fontFamily: '"Playfair Display", serif', fontWeight: 400, fontSize: 'clamp(1.6rem,3vw,2.4rem)' }}
-            >
-              You May Also Like
-            </h2>
-            <ProductGrid products={related} />
-          </section>
-        )}
+        <RelatedProducts category={product.category} excludeId={product.id} />
       </div>
     </PageWrapper>
   );

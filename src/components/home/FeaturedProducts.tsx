@@ -1,11 +1,25 @@
-﻿import { useRef } from 'react';
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { featuredProducts } from '../../data/products';
+import { useFeaturedProducts } from '../../hooks/useProducts';
 import ProductCard from '../product/ProductCard';
+
+function SkeletonCard() {
+  return (
+    <div className="snap-start shrink-0 w-[260px] sm:w-[280px]">
+      <div className="skeleton rounded-sm" style={{ aspectRatio: '3/4' }} />
+      <div className="mt-3 flex flex-col gap-2">
+        <div className="skeleton h-3 w-16 rounded" />
+        <div className="skeleton h-4 w-full rounded" />
+        <div className="skeleton h-3 w-20 rounded" />
+      </div>
+    </div>
+  );
+}
 
 export default function FeaturedProducts() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { data: products = [], isLoading } = useFeaturedProducts(8);
 
   const scroll = (dir: 'left' | 'right') => {
     if (!scrollRef.current) return;
@@ -32,7 +46,6 @@ export default function FeaturedProducts() {
           >
             This Week's Edit
           </h2>
-          {/* Scroll controls */}
           <div className="hidden md:flex items-center gap-2">
             <button
               type="button"
@@ -60,15 +73,13 @@ export default function FeaturedProducts() {
           role="list"
           aria-label="Featured products"
         >
-          {featuredProducts.map((p, i) => (
-            <div
-              key={p.id}
-              className="snap-start shrink-0 w-[260px] sm:w-[280px]"
-              role="listitem"
-            >
-              <ProductCard product={p} index={i} />
-            </div>
-          ))}
+          {isLoading
+            ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
+            : products.map((p, i) => (
+                <div key={p.id} className="snap-start shrink-0 w-[260px] sm:w-[280px]" role="listitem">
+                  <ProductCard product={p} index={i} />
+                </div>
+              ))}
         </div>
       </div>
     </section>

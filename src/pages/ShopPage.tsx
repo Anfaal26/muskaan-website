@@ -1,19 +1,19 @@
-﻿import { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { products } from '../data/products';
 import { categories } from '../data/categories';
+import { useProducts } from '../hooks/useProducts';
 import { useFilterStore } from '../store/filterStore';
 import PageWrapper from '../components/layout/PageWrapper';
 import ProductGrid from '../components/product/ProductGrid';
-import type { CategorySlug, SortOption } from '../types';
+import type { SortOption } from '../types';
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'newest', label: 'Newest' },
+  { value: 'oldest', label: 'Oldest' },
   { value: 'price-asc', label: 'Price: Low to High' },
   { value: 'price-desc', label: 'Price: High to Low' },
-  { value: 'popular', label: 'Most Popular' },
 ];
 
 const PAGE_SIZE = 12;
@@ -22,34 +22,49 @@ export default function ShopPage() {
   const { category } = useParams<{ category?: string }>();
   const [searchParams] = useSearchParams();
   const searchQ = searchParams.get('q') ?? '';
-  const { categories: activeCats, priceMin, priceMax, sortBy, setSortBy, activeFilterCount } = useFilterStore();
+  const { categories: activeCats, sortBy, setSortBy, clearAll, activeFilterCount } = useFilterStore();
   const [page, setPage] = useState(1);
   const [mobileFilters, setMobileFilters] = useState(false);
 
-  const filtered = useMemo(() => {
-    let list = products;
+  const { data: allProducts = [], isLoading } = useProducts(category);
 
-    if (category) list = list.filter(p => p.category === category);
-    if (activeCats.length > 0) list = list.filter(p => activeCats.includes(p.category));
-    list = list.filter(p => p.price >= priceMin && p.price <= priceMax);
+  const filtered = useMemo(() => {
+    let list = allProducts;
+
+    if (activeCats.length > 0) list = list.filter(p => p.category != null && activeCats.includes(p.category));
 
     if (searchQ) {
       const q = searchQ.toLowerCase();
       list = list.filter(p =>
-        p.name.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q) ||
-        p.fabric.toLowerCase().includes(q)
+        (p.label ?? '').toLowerCase().includes(q) ||
+        (p.description ?? '').toLowerCase().includes(q)
       );
     }
 
     switch (sortBy) {
-      case 'price-asc': list = [...list].sort((a, b) => a.price - b.price); break;
-      case 'price-desc': list = [...list].sort((a, b) => b.price - a.price); break;
-      case 'popular': list = [...list].sort((a, b) => b.reviewCount - a.reviewCount); break;
+      case 'oldest':
+        list = [...list].sort((a, b) => a.created_at.localeCompare(b.created_at));
+        break;
+      case 'price-asc':
+        list = [...list].sort((a, b) => {
+          if (a.price == null && b.price == null) return 0;
+          if (a.price == null) return 1;
+          if (b.price == null) return -1;
+          return a.price - b.price;
+        });
+        break;
+      case 'price-desc':
+        list = [...list].sort((a, b) => {
+          if (a.price == null && b.price == null) return 0;
+          if (a.price == null) return 1;
+          if (b.price == null) return -1;
+          return b.price - a.price;
+        });
+        break;
     }
 
     return list;
-  }, [category, activeCats, priceMin, priceMax, sortBy, searchQ]);
+  }, [allProducts, activeCats, sortBy, searchQ]);
 
   const visible = filtered.slice(0, page * PAGE_SIZE);
   const hasMore = visible.length < filtered.length;
@@ -59,7 +74,6 @@ export default function ShopPage() {
 
   return (
     <PageWrapper dotPattern="sm">
-      {/* Page header */}
       <div
         className="py-12 px-6 text-center border-b"
         style={{ borderColor: 'var(--color-border)', background: 'var(--color-bg)' }}
@@ -73,23 +87,21 @@ export default function ShopPage() {
         {currentCat && (
           <p className="mt-2 text-sm text-[var(--color-ink-muted)]">{currentCat.description}</p>
         )}
-        <p className="mt-1 text-xs text-[var(--color-ink-muted)]" style={{ fontFamily: '"DM Mono",monospace' }}>
-          {filtered.length} pieces
-        </p>
+        {!isLoading && (
+          <p className="mt-1 text-xs text-[var(--color-ink-muted)]" style={{ fontFamily: '"DM Mono",monospace' }}>
+            {filtered.length} pieces
+          </p>
+        )}
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div className="flex gap-10">
-          {/* Sidebar â€” desktop */}
           <aside className="hidden lg:block w-64 shrink-0" aria-label="Filters">
-            <FilterPanel />
+            <FilterPanel filterCount={filterCount} onClear={clearAll} />
           </aside>
 
-          {/* Main */}
           <div className="flex-1 min-w-0">
-            {/* Top bar */}
             <div className="flex items-center justify-between mb-6 gap-4">
-              {/* Mobile filter btn */}
               <button
                 type="button"
                 onClick={() => setMobileFilters(true)}
@@ -104,7 +116,6 @@ export default function ShopPage() {
                 )}
               </button>
 
-              {/* Sort */}
               <div className="flex items-center gap-2 ml-auto">
                 <label htmlFor="sort" className="text-xs text-[var(--color-ink-muted)] hidden sm:block">Sort by</label>
                 <select
@@ -120,9 +131,9 @@ export default function ShopPage() {
               </div>
             </div>
 
-            <ProductGrid products={visible} />
+            <ProductGrid products={visible} loading={isLoading} />
 
-            {hasMore && (
+            {hasMore && !isLoading && (
               <div className="mt-14 text-center">
                 <button
                   type="button"
@@ -137,7 +148,6 @@ export default function ShopPage() {
         </div>
       </div>
 
-      {/* Mobile filter drawer */}
       <AnimatePresence>
         {mobileFilters && (
           <>
@@ -160,7 +170,7 @@ export default function ShopPage() {
                   <X size={20} aria-hidden="true" />
                 </button>
               </div>
-              <FilterPanel onDone={() => setMobileFilters(false)} />
+              <FilterPanel filterCount={filterCount} onClear={clearAll} onDone={() => setMobileFilters(false)} />
             </motion.aside>
           </>
         )}
@@ -169,36 +179,34 @@ export default function ShopPage() {
   );
 }
 
-function FilterPanel({ onDone }: { onDone?: () => void }) {
-  const { categories: activeCats, priceMin, priceMax, sortBy: _s, toggleCategory, setPriceRange, clearAll, activeFilterCount } = useFilterStore();
-  const count = activeFilterCount();
+function FilterPanel({ filterCount, onClear, onDone }: { filterCount: number; onClear: () => void; onDone?: () => void }) {
+  const { categories: activeCats, toggleCategory } = useFilterStore();
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold uppercase tracking-widest text-[var(--color-ink)]">Filters</h3>
-        {count > 0 && (
+        {filterCount > 0 && (
           <button
             type="button"
-            onClick={() => { clearAll(); onDone?.(); }}
+            onClick={() => { onClear(); onDone?.(); }}
             className="text-xs text-[var(--color-ink-muted)] hover:text-[var(--color-terracotta)] cursor-pointer transition-colors"
           >
-            Clear All ({count})
+            Clear All ({filterCount})
           </button>
         )}
       </div>
 
-      {/* Categories */}
       <div>
         <p className="text-xs uppercase tracking-widest text-[var(--color-ink-muted)] mb-3">Category</p>
         <div className="flex flex-wrap gap-2">
           {categories.map(cat => {
-            const active = activeCats.includes(cat.slug as CategorySlug);
+            const active = activeCats.includes(cat.slug);
             return (
               <button
                 key={cat.slug}
                 type="button"
-                onClick={() => toggleCategory(cat.slug as CategorySlug)}
+                onClick={() => toggleCategory(cat.slug)}
                 className="px-3 py-1.5 text-xs rounded-full border cursor-pointer transition-all duration-150"
                 style={{
                   borderColor: active ? 'var(--color-gold)' : 'var(--color-border)',
@@ -214,32 +222,16 @@ function FilterPanel({ onDone }: { onDone?: () => void }) {
         </div>
       </div>
 
-      {/* Price range */}
-      <div>
-        <p className="text-xs uppercase tracking-widest text-[var(--color-ink-muted)] mb-3">Price (à§³)</p>
-        <div className="flex items-center gap-3">
-          <input
-            type="number"
-            value={priceMin}
-            onChange={e => setPriceRange(Number(e.target.value), priceMax)}
-            min={0}
-            max={priceMax}
-            className="w-24 border border-[var(--color-border)] rounded-sm px-2 py-1.5 text-xs text-center focus:outline-none focus:border-[var(--color-gold)]"
-            aria-label="Minimum price"
-            style={{ fontFamily: '"DM Mono",monospace' }}
-          />
-          <span className="text-[var(--color-ink-muted)] text-xs">â€”</span>
-          <input
-            type="number"
-            value={priceMax}
-            onChange={e => setPriceRange(priceMin, Number(e.target.value))}
-            min={priceMin}
-            max={25000}
-            className="w-24 border border-[var(--color-border)] rounded-sm px-2 py-1.5 text-xs text-center focus:outline-none focus:border-[var(--color-gold)]"
-            aria-label="Maximum price"
-            style={{ fontFamily: '"DM Mono",monospace' }}
-          />
-        </div>
+      <div className="pt-2">
+        <a
+          href="https://m.me/muskaan020"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 text-xs font-semibold px-4 py-3 rounded-sm transition-colors"
+          style={{ background: '#0084FF', color: 'white' }}
+        >
+          Contact us for pricing
+        </a>
       </div>
     </div>
   );
