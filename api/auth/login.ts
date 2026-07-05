@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import bcrypt from 'bcryptjs';
-import { signAdminToken, makeAuthCookie } from '../_lib/auth.js';
-import { getSupabaseAdmin } from '../_lib/supabaseAdmin.js';
-import { checkRateLimit, recordAttempt, clearAttempts } from '../_lib/rateLimit.js';
+import { signAdminToken, makeAuthCookie } from '../_lib/auth';
+import { getSupabaseAdmin } from '../_lib/supabaseAdmin';
+import { checkRateLimit, recordAttempt, clearAttempts } from '../_lib/rateLimit';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {

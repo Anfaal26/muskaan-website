@@ -1,4 +1,4 @@
-import { getSupabaseAdmin } from './supabaseAdmin.js';
+import { getSupabaseAdmin } from './supabaseAdmin';
 
 const MAX_ATTEMPTS = 5;
 const WINDOW_MINUTES = 15;
