@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { verifyAdminToken } from '../../_lib/auth';
-import { getSupabaseAdmin } from '../../_lib/supabaseAdmin';
+import { verifyAdminToken } from '../../_lib/auth.js';
+import { getSupabaseAdmin } from '../../_lib/supabaseAdmin.js';
 
 const PAGE_SIZE = 20;
 

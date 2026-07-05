@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { verifyAdminToken } from '../_lib/auth';
-import { getSupabaseAdmin } from '../_lib/supabaseAdmin';
+import { verifyAdminToken } from '../_lib/auth.js';
+import { getSupabaseAdmin } from '../_lib/supabaseAdmin.js';
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
