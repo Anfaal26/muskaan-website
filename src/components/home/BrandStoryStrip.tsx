@@ -6,18 +6,34 @@ export default function BrandStoryStrip() {
     <section className="py-0 overflow-hidden" aria-label="Brand story">
       <div className="grid lg:grid-cols-5">
         {/* Image side — 60% */}
-        <div className="lg:col-span-3 relative" style={{ minHeight: 400 }}>
-          <img
-            src="https://picsum.photos/seed/muskaan-story/800/600"
-            alt="Muskaan boutique — a curated display of ethnic garments"
-            className="w-full h-full object-cover"
-            style={{ minHeight: 400 }}
-            loading="lazy"
-          />
-          <div
-            className="absolute inset-0"
-            style={{ background: 'linear-gradient(to right, transparent 60%, rgba(249,247,244,0.5))' }}
+        <div
+          className="lg:col-span-3 relative flex items-center justify-center overflow-hidden dot-bg-sm"
+          style={{ minHeight: 400 }}
+        >
+          <motion.div
+            className="absolute rounded-full"
+            style={{
+              width: 420,
+              height: 420,
+              background: 'radial-gradient(circle, var(--color-gold-light) 0%, transparent 70%)',
+              opacity: 0.5,
+            }}
+            animate={{ scale: [1, 1.15, 1], opacity: [0.35, 0.55, 0.35] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
             aria-hidden="true"
+          />
+          <motion.img
+            src="/muskaan_sil.png"
+            alt="Muskaan ornamental emblem"
+            className="relative w-3/4 max-w-md object-contain"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1, y: [0, -12, 0] }}
+            transition={{
+              opacity: { duration: 0.8, ease: 'easeOut' },
+              scale: { duration: 0.8, ease: 'easeOut' },
+              y: { duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 0.8 },
+            }}
+            loading="lazy"
           />
         </div>
 
