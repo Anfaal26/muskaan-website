@@ -18,6 +18,7 @@ const ContactPage = lazy(() => import('./pages/ContactPage'));
 const AdminLoginPage = lazy(() => import('./pages/admin/LoginPage'));
 const AdminDashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 const AdminProductsPage = lazy(() => import('./pages/admin/ProductsPage'));
+const AdminMessagesPage = lazy(() => import('./pages/admin/MessagesPage'));
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 1000 * 60 * 5 } },
@@ -73,6 +74,14 @@ function AppRoutes() {
             element={
               <ProtectedAdminRoute>
                 <AdminProductsPage />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin/messages"
+            element={
+              <ProtectedAdminRoute>
+                <AdminMessagesPage />
               </ProtectedAdminRoute>
             }
           />

@@ -56,6 +56,30 @@ CREATE INDEX IF NOT EXISTS login_attempts_ip_time
   ON login_attempts (ip, attempted_at DESC);
 
 -- ============================================================
+-- Contact messages table (from the "Get in Touch" form)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS messages (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name        TEXT NOT NULL,
+  email       TEXT NOT NULL,
+  phone       TEXT,
+  subject     TEXT NOT NULL,
+  message     TEXT NOT NULL,
+  ip          TEXT,
+  read        BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS messages_created_at
+  ON messages (created_at DESC);
+
+ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
+
+-- No anon policies — inserts (from the public contact form) and reads
+-- (from the admin messages page) both go through the service role key
+-- via serverless API routes, never the anon client directly.
+
+-- ============================================================
 -- Row Level Security (RLS)
 -- ============================================================
 

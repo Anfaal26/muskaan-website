@@ -1,6 +1,6 @@
 ﻿import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, Mail, MapPin } from 'lucide-react';
+import { MessageCircle, Mail, MapPin, Phone } from 'lucide-react';
 
 function FacebookIcon({ size = 18 }: { size?: number }) {
   return (
@@ -58,12 +58,21 @@ export default function ContactPage() {
     setErrors({});
     setLoading(true);
 
-    // Simulate async submit
-    await new Promise(r => setTimeout(r, 1000));
-    console.log('Form submission:', form);
-    setLoading(false);
-    setForm(empty);
-    show('Message sent! We\'ll get back to you within 24 hours. 💛', 'success');
+    try {
+      const subjectLabel = subjectOptions.find(o => o.value === form.subject)?.label ?? form.subject;
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, subject: subjectLabel }),
+      });
+      if (!res.ok) throw new Error('Failed to send message');
+      setForm(empty);
+      show('Message sent! We\'ll get back to you within 24 hours. 💛', 'success');
+    } catch {
+      show('Something went wrong sending your message. Please try again or reach us on WhatsApp.', 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const set = (field: keyof FormState) => (
@@ -192,25 +201,49 @@ export default function ContactPage() {
                 Contact Details
               </h2>
 
-              <a
-                href="https://wa.me/8801XXXXXXXXX?text=Hello%20Muskaan%2C%20I%20have%20a%20question"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-4 group"
-              >
+              <div className="flex items-start gap-4">
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 mt-0.5"
                   style={{ background: '#25D366' }}
                 >
                   <MessageCircle size={18} className="text-white" aria-hidden="true" />
                 </div>
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm font-medium text-[var(--color-ink)]">WhatsApp (fastest response)</p>
+                  <a
+                    href="https://wa.me/8801711626826?text=Hello%20Muskaan%2C%20I%20have%20a%20question"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-[var(--color-ink-muted)] hover:text-[var(--color-gold)] transition-colors"
+                  >
+                    +880 1711-626826
+                  </a>
+                  <a
+                    href="https://wa.me/880171152050?text=Hello%20Muskaan%2C%20I%20have%20a%20question"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-[var(--color-ink-muted)] hover:text-[var(--color-gold)] transition-colors"
+                  >
+                    +880 171-152050
+                  </a>
+                </div>
+              </div>
+
+              <a
+                href="tel:+8801611782711"
+                className="flex items-start gap-4 group"
+              >
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                  style={{ background: 'var(--color-border)' }}
+                >
+                  <Phone size={18} style={{ color: 'var(--color-ink)' }} aria-hidden="true" />
+                </div>
                 <div>
                   <p className="text-sm font-medium text-[var(--color-ink)] group-hover:text-[var(--color-gold)] transition-colors">
-                    WhatsApp (fastest response)
+                    Phone
                   </p>
-                  <p className="text-xs text-[var(--color-ink-muted)] mt-0.5">
-                    +880 1X-XXXXXXXX · Tap to chat
-                  </p>
+                  <p className="text-xs text-[var(--color-ink-muted)] mt-0.5">+880 1611-782711</p>
                 </div>
               </a>
 
@@ -263,7 +296,8 @@ export default function ContactPage() {
                   <p className="text-sm font-medium text-[var(--color-ink)]">Visit Us</p>
                   <p className="text-xs text-[var(--color-ink-muted)] mt-0.5 leading-relaxed">
                     Muskaan Boutique<br />
-                    Dhaka, Bangladesh<br />
+                    House 117, Road 9/A<br />
+                    Dhanmondi, Dhaka<br />
                     <span className="italic">By appointment preferred</span>
                   </p>
                 </div>

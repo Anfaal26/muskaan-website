@@ -1,7 +1,8 @@
 import { useState, type ReactNode } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Package, Mail, LogOut, Menu, X } from 'lucide-react';
 import { useAdminContext } from '../../contexts/AdminContext';
+import { useAdminMessages } from '../../hooks/useMessages';
 
 interface Props {
   children: ReactNode;
@@ -12,12 +13,15 @@ interface Props {
 const NAV = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/admin/products', label: 'Products', icon: Package },
+  { to: '/admin/messages', label: 'Messages', icon: Mail },
 ];
 
 export default function AdminLayout({ children, title, action }: Props) {
   const { username, clearAdmin } = useAdminContext();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { data: messagesData } = useAdminMessages(1);
+  const unread = messagesData?.unread ?? 0;
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => null);
@@ -42,6 +46,11 @@ export default function AdminLayout({ children, title, action }: Props) {
         >
           <Icon size={18} aria-hidden="true" />
           {label}
+          {to === '/admin/messages' && unread > 0 && (
+            <span className="ml-auto min-w-5 h-5 px-1.5 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">
+              {unread}
+            </span>
+          )}
         </NavLink>
       ))}
     </nav>

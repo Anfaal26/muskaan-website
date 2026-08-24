@@ -66,7 +66,7 @@ export function useFeaturedProducts(limit = 8) {
 
 // ── Admin mutations (go through serverless API for auth) ────────────────────
 
-async function apiFetch(path: string, opts: RequestInit = {}) {
+export async function apiFetch(path: string, opts: RequestInit = {}) {
   const res = await fetch(path, {
     ...opts,
     credentials: 'include',
