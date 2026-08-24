@@ -12,8 +12,8 @@ const timeline = [
 ];
 
 const team = [
-  { name: 'Sanjeeda Akhter', role: 'Designer and Founder', img: 'https://picsum.photos/seed/team1/200/200' },
-  { name: 'Afzal Hossain', role: 'Proprietor', img: 'https://picsum.photos/seed/team2/200/200' },
+  { name: 'Sanjeeda Akhter', role: 'Designer and Founder' },
+  { name: 'Afzal Hossain', role: 'Proprietor' },
 ];
 
 const values = [
@@ -129,28 +129,33 @@ export default function AboutPage() {
           Meet the Founders
         </motion.h2>
 
-        <div className="grid sm:grid-cols-2 gap-8 max-w-xl mx-auto">
-          {team.map((member, i) => (
-            <motion.div
-              key={member.name}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: i * 0.1 }}
-              className="flex flex-col items-center gap-4 text-center"
-            >
-              <div
-                className="w-28 h-28 rounded-full overflow-hidden"
-                style={{ border: '2px solid var(--color-gold)' }}
+        <div className="flex flex-col items-center gap-8 max-w-md mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="w-full rounded-sm overflow-hidden"
+            style={{ border: '2px solid var(--color-gold)', aspectRatio: '4/3' }}
+          >
+            <img
+              src="/about-gallery/meet_the_founders.jpeg"
+              alt="Sanjeeda Akhter and Afzal Hossain, the founders of Muskaan Boutique"
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </motion.div>
+
+          <div className="grid grid-cols-2 gap-8 w-full">
+            {team.map((member, i) => (
+              <motion.div
+                key={member.name}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.15 + i * 0.1 }}
+                className="text-center"
               >
-                <img
-                  src={member.img}
-                  alt={member.name}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <div>
                 <p
                   className="text-lg text-[var(--color-ink)]"
                   style={{ fontFamily: '"Playfair Display", serif', fontWeight: 400 }}
@@ -158,9 +163,9 @@ export default function AboutPage() {
                   {member.name}
                 </p>
                 <p className="text-xs text-[var(--color-ink-muted)] mt-0.5">{member.role}</p>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
