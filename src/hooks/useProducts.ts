@@ -4,13 +4,33 @@ import type { DbProduct } from '../types';
 
 // ── Public queries (use anon Supabase client directly) ──────────────────────
 
-export function useProducts(category?: string) {
+export function useProducts(category?: string, opts?: { enabled?: boolean }) {
   return useQuery<DbProduct[]>({
     queryKey: ['products', category ?? 'all'],
+    enabled: opts?.enabled ?? true,
     queryFn: async () => {
       let q = supabase.from('products').select('*').order('created_at', { ascending: false });
       if (category) q = q.eq('category', category);
       const { data, error } = await q;
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+/** Products uploaded in the last 7 days, newest first, capped at `limit`. */
+export function useNewArrivals(limit = 200, opts?: { enabled?: boolean }) {
+  return useQuery<DbProduct[]>({
+    queryKey: ['products', 'new-arrivals', limit],
+    enabled: opts?.enabled ?? true,
+    queryFn: async () => {
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .gte('created_at', sevenDaysAgo)
+        .order('created_at', { ascending: false })
+        .limit(limit);
       if (error) throw error;
       return data ?? [];
     },

@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { categories } from '../data/categories';
-import { useProducts } from '../hooks/useProducts';
+import { useProducts, useNewArrivals } from '../hooks/useProducts';
 import { useFilterStore } from '../store/filterStore';
 import PageWrapper from '../components/layout/PageWrapper';
 import ProductGrid from '../components/product/ProductGrid';
@@ -26,7 +26,16 @@ export default function ShopPage() {
   const [page, setPage] = useState(1);
   const [mobileFilters, setMobileFilters] = useState(false);
 
-  const { data: allProducts = [], isLoading } = useProducts(category);
+  const isNewArrivals = category === 'new-arrivals';
+  const { data: standardProducts = [], isLoading: standardLoading } = useProducts(
+    isNewArrivals ? undefined : category,
+    { enabled: !isNewArrivals }
+  );
+  const { data: newArrivals = [], isLoading: newArrivalsLoading } = useNewArrivals(200, {
+    enabled: isNewArrivals,
+  });
+  const allProducts = isNewArrivals ? newArrivals : standardProducts;
+  const isLoading = isNewArrivals ? newArrivalsLoading : standardLoading;
 
   const filtered = useMemo(() => {
     let list = allProducts;
