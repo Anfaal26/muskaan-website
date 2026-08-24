@@ -33,12 +33,12 @@ export default function InstagramGrid() {
             Follow Our Story
           </h2>
           <a
-            href="https://facebook.com/muskaan020"
+            href="https://www.instagram.com/muskaan02.0"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-[var(--color-ink-muted)] hover:text-[var(--color-gold)] transition-colors mt-2 inline-block"
           >
-            @muskaan020
+            @muskaan02.0
           </a>
         </motion.div>
 
@@ -46,7 +46,7 @@ export default function InstagramGrid() {
           {seeds.map((seed, i) => (
             <motion.a
               key={seed}
-              href="https://facebook.com/muskaan020"
+              href="https://www.instagram.com/muskaan02.0"
               target="_blank"
               rel="noopener noreferrer"
               className="group relative overflow-hidden rounded-sm cursor-pointer"
@@ -55,11 +55,11 @@ export default function InstagramGrid() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.35, delay: i * 0.05 }}
-              aria-label="View on Facebook"
+              aria-label="View on Instagram"
             >
               <img
                 src={`https://picsum.photos/seed/${seed}/300/300`}
-                alt="Muskaan boutique â€” customer styling"
+                alt="Muskaan boutique — customer styling"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 loading="lazy"
               />

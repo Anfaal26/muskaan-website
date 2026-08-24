@@ -1,24 +1,30 @@
 ﻿import { motion } from 'framer-motion';
+import { Sparkles, Landmark, Heart } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 
 const timeline = [
-  { year: '2007', event: 'Founded', detail: 'Muskaan opens its doors in Dhaka â€” a single room, a rack of hand-selected sarees, and a dream.' },
-  { year: '2012', event: 'Growing Family', detail: 'We expand to a proper boutique space, welcoming artisan collaborations from across Bangladesh and India.' },
-  { year: '2018', event: 'Going Online', detail: 'Our first online orders. Customers from across Bangladesh â€” and the diaspora abroad â€” discover Muskaan.' },
-  { year: '2023', event: 'New Collection', detail: 'Launch of our indo-western fusion line, honouring tradition while speaking to a modern woman.' },
-  { year: '2025', event: 'Today', detail: 'Over 10,000 pieces curated. Still family-run. Still choosing every garment with love.' },
+  { year: '2005', event: 'Founded', detail: 'Muskaan opens its doors in Dhaka — a single room, a rack of hand-selected sarees, and a dream.' },
+  { year: '2007', event: 'First Store', detail: 'Muskaan opens its first store in Bashundhara Shopping Centre.' },
+  { year: '2012', event: 'Second Store', detail: 'Muskaan opens another store in Dhanmondi, growing closer to its customers.' },
+  { year: '2016', event: 'Going Global', detail: 'Muskaan becomes widely available online, and now has a small but global consumer base.' },
 ];
 
 const team = [
-  { name: 'Nasrin Akter', role: 'Founder & Lead Curator', img: 'https://picsum.photos/seed/team1/200/200' },
-  { name: 'Rafiq Hossain', role: 'Operations & Sourcing', img: 'https://picsum.photos/seed/team2/200/200' },
-  { name: 'Tania Begum', role: 'Design & Styling', img: 'https://picsum.photos/seed/team3/200/200' },
+  { name: 'Sanjeeda Akhter', role: 'Designer and Founder', img: 'https://picsum.photos/seed/team1/200/200' },
+  { name: 'Afzal Hossain', role: 'Proprietor', img: 'https://picsum.photos/seed/team2/200/200' },
 ];
 
 const values = [
-  { icon: 'âœ¦', title: 'Quality', body: 'We source only fabrics and craftsmanship we would wear ourselves. No compromises.' },
-  { icon: 'â§', title: 'Heritage', body: 'Every piece celebrates South Asian textile traditions â€” Jamdani, chikankari, zardozi, and more.' },
-  { icon: 'â™¡', title: 'Love', body: 'Muskaan means smile. That warmth is in every garment, every package, every interaction.' },
+  { icon: Sparkles, title: 'Quality', body: 'We source only fabrics and craftsmanship we would wear ourselves. No compromises.' },
+  { icon: Landmark, title: 'Heritage', body: 'Every piece celebrates South Asian textile traditions — Jamdani, chikankari, zardozi, and more.' },
+  { icon: Heart, title: 'Love', body: 'Muskaan means smile. That warmth is in every garment, every package, every interaction.' },
+];
+
+const galleryImages = [
+  { src: '/about-gallery/store-display.jpg', alt: 'Muskaan store display of curated ethnic wear' },
+  { src: '/about-gallery/styling-shoot.jpg', alt: 'Behind the scenes styling and filming at a Muskaan pop-up' },
+  { src: '/about-gallery/customers.jpg', alt: 'Customers browsing at a Muskaan pop-up event' },
+  { src: '/about-gallery/award.jpg', alt: 'Muskaan Boutique’s Youth Entrepreneurial Festival 2021 award and certificate of appreciation' },
 ];
 
 export default function AboutPage() {
@@ -49,7 +55,7 @@ export default function AboutPage() {
             className="block mt-6 text-sm not-italic"
             style={{ color: 'var(--color-gold)', fontFamily: '"DM Mono", monospace' }}
           >
-            â€” Nasrin Akter, Founder
+            — Sanjeeda Akhter, Founder
           </cite>
         </motion.blockquote>
       </section>
@@ -118,10 +124,10 @@ export default function AboutPage() {
           className="text-center text-[var(--color-ink)] mb-14"
           style={{ fontFamily: '"Playfair Display", serif', fontWeight: 300, fontSize: '2.5rem' }}
         >
-          Meet the Family
+          Meet the Founders
         </motion.h2>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+        <div className="grid sm:grid-cols-2 gap-8 max-w-xl mx-auto">
           {team.map((member, i) => (
             <motion.div
               key={member.name}
@@ -180,13 +186,11 @@ export default function AboutPage() {
               className="flex flex-col gap-3 p-8 rounded-sm text-center"
               style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
             >
-              <span
-                className="text-3xl"
+              <v.icon
+                size={32}
                 style={{ color: 'var(--color-gold)' }}
                 aria-hidden="true"
-              >
-                {v.icon}
-              </span>
+              />
               <h3
                 className="text-xl text-[var(--color-ink)]"
                 style={{ fontFamily: '"Playfair Display", serif', fontWeight: 400 }}
@@ -202,15 +206,15 @@ export default function AboutPage() {
       {/* Photo strip */}
       <section className="py-10 px-6 overflow-hidden" aria-label="Gallery">
         <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
-          {['gal1','gal2','gal3','gal4','gal5'].map(seed => (
+          {galleryImages.map(img => (
             <div
-              key={seed}
+              key={img.src}
               className="shrink-0 rounded-sm overflow-hidden"
               style={{ width: 260, height: 180, background: 'var(--color-border)' }}
             >
               <img
-                src={`https://picsum.photos/seed/${seed}/520/360`}
-                alt="Muskaan boutique gallery"
+                src={img.src}
+                alt={img.alt}
                 className="w-full h-full object-cover"
                 loading="lazy"
               />

@@ -6,6 +6,7 @@
       "runtimeExecutable": "F:\\NodeJS\\node.exe",
       "runtimeArgs": ["F:\\NodeJS\\node_modules\\npm\\bin\\npx-cli.js", "vite", "--host"],
       "port": 5173,
+      "autoPort": true,
       "cwd": "D:\\muskaan_website"
     }
   ]

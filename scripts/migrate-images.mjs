@@ -63,6 +63,18 @@ async function migrate() {
     const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(storagePath);
     const image_url = urlData.publicUrl;
 
+    // Skip DB insert if this image_url already exists
+    const { data: existing } = await supabase
+      .from('products')
+      .select('id')
+      .eq('image_url', image_url)
+      .maybeSingle();
+
+    if (existing) {
+      console.log(`⏭ Already exists: ${filename}`);
+      continue;
+    }
+
     // Insert product record
     const { error: dbError } = await supabase.from('products').insert({ image_url });
 

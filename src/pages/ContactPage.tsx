@@ -16,7 +16,7 @@ import Select from '../components/ui/Select';
 import { useToast } from '../hooks/useToast';
 
 const subjectOptions = [
-  { value: '', label: 'Select a subjectâ€¦' },
+  { value: '', label: 'Select a subject…' },
   { value: 'order', label: 'Order Inquiry' },
   { value: 'tailoring', label: 'Custom Tailoring' },
   { value: 'general', label: 'General Question' },
@@ -63,7 +63,7 @@ export default function ContactPage() {
     console.log('Form submission:', form);
     setLoading(false);
     setForm(empty);
-    show('Message sent! We\'ll get back to you within 24 hours. ðŸ’›', 'success');
+    show('Message sent! We\'ll get back to you within 24 hours. 💛', 'success');
   };
 
   const set = (field: keyof FormState) => (
@@ -89,7 +89,7 @@ export default function ContactPage() {
             Get in Touch
           </h1>
           <p className="text-[var(--color-ink-muted)] mt-3 max-w-md mx-auto text-sm">
-            We'd love to hear from you â€” whether it's an order question, custom tailoring enquiry, or just a hello.
+            We'd love to hear from you — whether it's an order question, custom tailoring enquiry, or just a hello.
           </p>
         </motion.div>
 
@@ -150,7 +150,7 @@ export default function ContactPage() {
                 <textarea
                   id="message"
                   rows={5}
-                  placeholder="Tell us how we can helpâ€¦"
+                  placeholder="Tell us how we can help…"
                   value={form.message}
                   onChange={set('message')}
                   required
@@ -209,7 +209,7 @@ export default function ContactPage() {
                     WhatsApp (fastest response)
                   </p>
                   <p className="text-xs text-[var(--color-ink-muted)] mt-0.5">
-                    +880 1X-XXXXXXXX Â· Tap to chat
+                    +880 1X-XXXXXXXX · Tap to chat
                   </p>
                 </div>
               </a>

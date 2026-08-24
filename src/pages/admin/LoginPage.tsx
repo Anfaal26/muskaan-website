@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8">
         <div className="text-center mb-8">
-          <img src="/logo.jpg" alt="Muskaan Boutique" className="h-14 w-auto object-contain mx-auto mb-4" />
+          <img src="/logo.png" alt="Muskaan Boutique" className="h-14 w-auto object-contain mx-auto mb-4" />
           <h1 className="text-xl font-semibold text-gray-900">Admin Login</h1>
           <p className="text-sm text-gray-500 mt-1">Muskaan Boutique Dashboard</p>
         </div>

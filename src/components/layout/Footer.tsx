@@ -29,7 +29,7 @@ const quickLinks = [
 
 const socials = [
   { label: 'Facebook', href: 'https://facebook.com/muskaan020', Icon: FacebookIcon },
-  { label: 'Instagram', href: 'https://instagram.com', Icon: InstagramIcon },
+  { label: 'Instagram', href: 'https://www.instagram.com/muskaan02.0', Icon: InstagramIcon },
   { label: 'WhatsApp', href: 'https://wa.me/8801XXXXXXXXX', Icon: MessageCircle },
 ];
 
