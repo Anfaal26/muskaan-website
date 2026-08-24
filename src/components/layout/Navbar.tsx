@@ -62,9 +62,9 @@ export default function Navbar() {
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
-          background: scrolled ? 'rgba(249,247,244,0.97)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(8px)' : 'none',
-          borderBottom: scrolled ? '1px solid var(--color-border)' : '1px solid transparent',
+          background: 'var(--color-ink)',
+          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
+          boxShadow: scrolled ? '0 4px 16px rgba(0,0,0,0.15)' : 'none',
         }}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center h-16 gap-6">
@@ -78,9 +78,9 @@ export default function Navbar() {
                 key={l.to}
                 to={l.to}
                 className={({ isActive }) =>
-                  `text-sm tracking-wide transition-colors duration-150 hover:text-[var(--color-gold)] ${
-                    isActive ? 'text-[var(--color-gold)]' : 'text-[var(--color-ink)]'
-                  } ${l.gold ? 'text-[var(--color-gold)] font-medium' : ''}`
+                  `text-sm tracking-wide transition-colors duration-150 hover:text-[var(--color-gold)] ${l.gold ? 'font-medium' : ''} ${
+                    isActive || l.gold ? 'text-[var(--color-gold)]' : 'text-white/80'
+                  }`
                 }
               >
                 {l.label}
@@ -105,7 +105,7 @@ export default function Navbar() {
                     value={searchVal}
                     onChange={e => setSearchVal(e.target.value)}
                     placeholder="Search..."
-                    className="w-full border-b border-[var(--color-ink)] bg-transparent text-sm py-1 px-1 focus:outline-none text-[var(--color-ink)] placeholder:text-[var(--color-ink-muted)]"
+                    className="w-full border-b border-white/30 bg-transparent text-sm py-1 px-1 focus:outline-none text-white placeholder:text-white/40"
                     aria-label="Search products"
                   />
                 </motion.form>
@@ -115,7 +115,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => { setSearchOpen(o => !o); if (searchOpen) setSearchVal(''); }}
-              className="p-2 text-[var(--color-ink)] hover:text-[var(--color-gold)] cursor-pointer transition-colors"
+              className="p-2 text-white/80 hover:text-[var(--color-gold)] cursor-pointer transition-colors"
               aria-label={searchOpen ? 'Close search' : 'Open search'}
             >
               {searchOpen ? <X size={18} aria-hidden="true" /> : <Search size={18} aria-hidden="true" />}
@@ -123,7 +123,7 @@ export default function Navbar() {
 
             <Link
               to="/wishlist"
-              className="relative p-2 text-[var(--color-ink)] hover:text-[var(--color-gold)] transition-colors"
+              className="relative p-2 text-white/80 hover:text-[var(--color-gold)] transition-colors"
               aria-label={`Wishlist (${wishlistCount} items)`}
             >
               <Heart size={18} aria-hidden="true" />
@@ -137,7 +137,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={openCart}
-              className="relative p-2 text-[var(--color-ink)] hover:text-[var(--color-gold)] cursor-pointer transition-colors"
+              className="relative p-2 text-white/80 hover:text-[var(--color-gold)] cursor-pointer transition-colors"
               aria-label={`Cart (${itemCount} items)`}
             >
               <ShoppingBag size={18} aria-hidden="true" />
@@ -159,7 +159,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setAdminMenuOpen(o => !o)}
-                  className="p-2 text-[var(--color-ink)] hover:text-[var(--color-gold)] cursor-pointer transition-colors"
+                  className="p-2 text-white/80 hover:text-[var(--color-gold)] cursor-pointer transition-colors"
                   aria-label="Admin menu"
                   title={`Logged in as ${username ?? 'admin'}`}
                 >
@@ -199,7 +199,7 @@ export default function Navbar() {
 
             <button
               type="button"
-              className="lg:hidden p-2 text-[var(--color-ink)] hover:text-[var(--color-gold)] cursor-pointer transition-colors"
+              className="lg:hidden p-2 text-white/80 hover:text-[var(--color-gold)] cursor-pointer transition-colors"
               onClick={() => setMobileOpen(o => !o)}
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileOpen}
