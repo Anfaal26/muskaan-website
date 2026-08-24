@@ -3,10 +3,12 @@ import { Sparkles, Landmark, Heart } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 
 const timeline = [
-  { year: '2005', event: 'Founded', detail: 'Muskaan opens its doors in Dhaka — a single room, a rack of hand-selected sarees, and a dream.' },
-  { year: '2007', event: 'First Store', detail: 'Muskaan opens its first store in Bashundhara Shopping Centre.' },
-  { year: '2012', event: 'Second Store', detail: 'Muskaan opens another store in Dhanmondi, growing closer to its customers.' },
-  { year: '2016', event: 'Going Global', detail: 'Muskaan becomes widely available online, and now has a small but global consumer base.' },
+  { year: '2005', event: 'Founded', detail: 'In a single room in Dhaka, with a rack of hand-picked sarees and a quiet dream, Muskaan is born.' },
+  { year: '2007', event: 'First Store', detail: 'Muskaan steps into its first storefront at Bashundhara Shopping Centre, ready to welcome its first walk-in customers.' },
+  { year: '2012', event: 'Second Store', detail: 'A second home opens in Dhanmondi, bringing Muskaan closer to the women who wear it.' },
+  { year: '2016', event: 'Going Global', detail: 'Muskaan crosses borders online, building a small but growing family of customers around the world.' },
+  { year: '2021', event: 'Staying Close', detail: 'Through a hard year, Muskaan leans on its community online, keeping the craft alive one order at a time.' },
+  { year: 'Present', event: 'A New Chapter', detail: 'Two decades on, from that single room, Muskaan is no longer just where women shop. It is where they come home to themselves.' },
 ];
 
 const team = [

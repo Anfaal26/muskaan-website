@@ -69,7 +69,7 @@ export default function Navbar() {
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center h-16 gap-6">
           <Link to="/" aria-label="Muskaan Boutique — go to homepage" className="shrink-0">
-            <img src="/logo.png" alt="Muskaan Boutique" className="h-10 w-auto object-contain" />
+            <img src="/muskaan_logo_main.png" alt="Muskaan Boutique" className="h-10 w-auto object-contain" />
           </Link>
 
           <div className="hidden lg:flex items-center gap-7 flex-1 justify-center">
