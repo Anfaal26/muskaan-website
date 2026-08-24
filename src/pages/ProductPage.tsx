@@ -10,8 +10,7 @@ import PageWrapper from '../components/layout/PageWrapper';
 import ProductGallery from '../components/product/ProductGallery';
 import ProductGrid from '../components/product/ProductGrid';
 import Button from '../components/ui/Button';
-
-const FB_USERNAME = import.meta.env.VITE_FACEBOOK_PAGE_USERNAME ?? 'muskaan020';
+import MessengerMenu from '../components/product/MessengerMenu';
 
 function MessengerIcon() {
   return (
@@ -67,7 +66,6 @@ export default function ProductPage() {
 
   const label = product.label ?? 'Latest Collection';
   const wishlisted = isWishlisted(product.id);
-  const messengerUrl = `https://m.me/${FB_USERNAME}?text=${encodeURIComponent(`Hi, I'm interested in this product: ${product.image_url}`)}`;
 
   const handleWishlist = () => {
     toggle(product);
@@ -118,15 +116,18 @@ export default function ProductPage() {
                 &#2547;{product.price.toLocaleString()}
               </p>
             ) : (
-              <a
-                href={messengerUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm font-medium hover:underline"
-                style={{ color: '#0084FF' }}
-              >
-                Contact for pricing &rarr;
-              </a>
+              <MessengerMenu product={product} align="left">
+                {({ onClick }) => (
+                  <button
+                    type="button"
+                    onClick={onClick}
+                    className="text-sm font-medium hover:underline cursor-pointer"
+                    style={{ color: '#0084FF' }}
+                  >
+                    Contact for pricing &rarr;
+                  </button>
+                )}
+              </MessengerMenu>
             )}
 
             {product.description && (
@@ -153,17 +154,20 @@ export default function ProductPage() {
                 Add to Bag
               </Button>
 
-              <a href={messengerUrl} target="_blank" rel="noopener noreferrer" className="w-full">
-                <Button
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  icon={<MessengerIcon />}
-                  style={{ background: '#0084FF', borderColor: '#0084FF' }}
-                >
-                  Enquire on Messenger
-                </Button>
-              </a>
+              <MessengerMenu product={product} align="left">
+                {({ onClick }) => (
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    onClick={onClick}
+                    icon={<MessengerIcon />}
+                    style={{ background: '#0084FF', borderColor: '#0084FF' }}
+                  >
+                    Enquire on Messenger
+                  </Button>
+                )}
+              </MessengerMenu>
 
               <Button
                 variant="ghost"
