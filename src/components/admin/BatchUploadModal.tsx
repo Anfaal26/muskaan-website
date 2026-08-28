@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Upload, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { useCreateProduct } from '../../hooks/useProducts';
 import { validateImageFile, uploadProductImage, runWithConcurrency } from '../../lib/uploadImage';
+import LabelSelect from './LabelSelect';
 
 interface Props {
   open: boolean;
@@ -233,12 +234,7 @@ export default function BatchUploadModal({ open, onClose }: Props) {
                   <label htmlFor="batch-label" className="block text-sm font-medium text-gray-700 mb-1">
                     Label <span className="text-gray-400 font-normal">(optional, applied to all)</span>
                   </label>
-                  <input
-                    id="batch-label" type="text" value={label} onChange={e => setLabel(e.target.value)}
-                    placeholder="e.g. New Arrivals"
-                    disabled={running}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-indigo-400 disabled:bg-gray-50"
-                  />
+                  <LabelSelect id="batch-label" value={label} onChange={setLabel} disabled={running} />
                 </div>
                 <div>
                   <label htmlFor="batch-price" className="block text-sm font-medium text-gray-700 mb-1">

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Upload } from 'lucide-react';
 import { useCreateProduct, useUpdateProduct } from '../../hooks/useProducts';
 import { validateImageFile, uploadProductImage } from '../../lib/uploadImage';
+import LabelSelect from './LabelSelect';
 import type { DbProduct } from '../../types';
 
 interface Props {
@@ -155,11 +156,7 @@ export default function ProductModal({ open, product, onClose }: Props) {
                 <label htmlFor="label" className="block text-sm font-medium text-gray-700 mb-1">
                   Label <span className="text-gray-400 font-normal">(optional)</span>
                 </label>
-                <input
-                  id="label" type="text" value={label} onChange={e => setLabel(e.target.value)}
-                  placeholder="e.g. New Arrivals"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-indigo-400"
-                />
+                <LabelSelect id="label" value={label} onChange={setLabel} disabled={isPending} />
               </div>
 
               {/* Price */}
