@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Upload } from 'lucide-react';
+import { X, Upload, Sparkles, Check, Loader2 } from 'lucide-react';
 import { useCreateProduct, useUpdateProduct } from '../../hooks/useProducts';
 import { validateImageFile, uploadProductImage } from '../../lib/uploadImage';
+import { generateImageVariants, blobToFile, type ImageVariant } from '../../lib/imageAugment';
 import LabelSelect from './LabelSelect';
 import type { DbProduct } from '../../types';
 
@@ -10,6 +11,10 @@ interface Props {
   open: boolean;
   product?: DbProduct | null;
   onClose: () => void;
+}
+
+interface GeneratedVariant extends ImageVariant {
+  selected: boolean;
 }
 
 export default function ProductModal({ open, product, onClose }: Props) {
@@ -27,6 +32,11 @@ export default function ProductModal({ open, product, onClose }: Props) {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const [existingGallery, setExistingGallery] = useState<string[]>([]);
+  const [generated, setGenerated] = useState<GeneratedVariant[]>([]);
+  const [generating, setGenerating] = useState(false);
+  const [genError, setGenError] = useState<string | null>(null);
+
   useEffect(() => {
     if (open && product) {
       setLabel(product.label ?? '');
@@ -34,12 +44,24 @@ export default function ProductModal({ open, product, onClose }: Props) {
       setDescription(product.description ?? '');
       setCategory(product.category ?? '');
       setImagePreview(product.image_url);
+      setExistingGallery(product.gallery_urls ?? []);
     } else if (open && !product) {
       setLabel(''); setPrice(''); setDescription(''); setCategory('');
       setImageFile(null); setImagePreview(null);
+      setExistingGallery([]);
     }
+    clearGenerated();
     setUploadError(null);
+    setGenError(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, product]);
+
+  function clearGenerated() {
+    setGenerated(prev => {
+      prev.forEach(v => URL.revokeObjectURL(v.previewUrl));
+      return [];
+    });
+  }
 
   function handleFile(file: File) {
     setUploadError(null);
@@ -48,10 +70,33 @@ export default function ProductModal({ open, product, onClose }: Props) {
       setUploadError(err);
       return;
     }
+    clearGenerated();
     setImageFile(file);
     const reader = new FileReader();
     reader.onload = e => setImagePreview(e.target?.result as string);
     reader.readAsDataURL(file);
+  }
+
+  async function handleGenerateViews() {
+    if (!imageFile) return;
+    setGenError(null);
+    setGenerating(true);
+    try {
+      const variants = await generateImageVariants(imageFile);
+      setGenerated(variants.map(v => ({ ...v, selected: false })));
+    } catch (err) {
+      setGenError(err instanceof Error ? err.message : 'Failed to generate views');
+    } finally {
+      setGenerating(false);
+    }
+  }
+
+  function toggleVariant(key: string) {
+    setGenerated(prev => prev.map(v => (v.key === key ? { ...v, selected: !v.selected } : v)));
+  }
+
+  function removeExistingGalleryImage(url: string) {
+    setExistingGallery(prev => prev.filter(u => u !== url));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -69,8 +114,16 @@ export default function ProductModal({ open, product, onClose }: Props) {
         imageUrl = await uploadProductImage(imageFile);
       }
 
+      const selectedVariants = generated.filter(v => v.selected);
+      const uploadedVariantUrls = await Promise.all(
+        selectedVariants.map(v =>
+          uploadProductImage(blobToFile(v.blob, `${v.key}-${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`))
+        )
+      );
+
       const body = {
         image_url: imageUrl,
+        gallery_urls: [...existingGallery, ...uploadedVariantUrls],
         label: label.trim() || null,
         price: price.trim() ? Number(price) : null,
         description: description.trim() || null,
@@ -150,6 +203,82 @@ export default function ProductModal({ open, product, onClose }: Props) {
                 </div>
                 {uploadError && <p className="mt-1 text-xs text-red-500">{uploadError}</p>}
               </div>
+
+              {/* Generate more views */}
+              {imageFile && (
+                <div className="border border-gray-100 rounded-lg p-3 bg-gray-50/60">
+                  <button
+                    type="button"
+                    onClick={handleGenerateViews}
+                    disabled={generating}
+                    className="flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 cursor-pointer disabled:opacity-50"
+                  >
+                    {generating ? <Loader2 size={15} className="animate-spin" /> : <Sparkles size={15} />}
+                    {generating ? 'Generating...' : 'Generate More Views'}
+                  </button>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Free, local variants from this photo (mirrored, detail zoom, brightened) — not new camera angles.
+                  </p>
+                  {genError && <p className="mt-1 text-xs text-red-500">{genError}</p>}
+
+                  {generated.length > 0 && (
+                    <div className="mt-3">
+                      <p className="text-xs font-medium text-gray-500 mb-2">
+                        Select which to include with this listing:
+                      </p>
+                      <div className="grid grid-cols-3 gap-2">
+                        {generated.map(v => (
+                          <button
+                            key={v.key}
+                            type="button"
+                            onClick={() => toggleVariant(v.key)}
+                            className="relative rounded-lg overflow-hidden bg-gray-100 cursor-pointer"
+                            style={{ aspectRatio: '1/1' }}
+                          >
+                            <img src={v.previewUrl} alt={v.label} className="w-full h-full object-cover" />
+                            <div
+                              className={`absolute inset-0 flex items-center justify-center transition-colors ${
+                                v.selected ? 'bg-indigo-600/40' : 'bg-black/0 hover:bg-black/20'
+                              }`}
+                            >
+                              {v.selected && (
+                                <span className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center">
+                                  <Check size={14} className="text-white" />
+                                </span>
+                              )}
+                            </div>
+                            <span className="absolute bottom-1 left-1 right-1 text-[10px] text-white bg-black/50 rounded px-1 py-0.5 text-center truncate">
+                              {v.label}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Existing gallery images (edit mode) */}
+              {existingGallery.length > 0 && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Additional Photos</label>
+                  <div className="grid grid-cols-4 gap-2">
+                    {existingGallery.map(url => (
+                      <div key={url} className="relative rounded-lg overflow-hidden bg-gray-100" style={{ aspectRatio: '1/1' }}>
+                        <img src={url} alt="" className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeExistingGalleryImage(url)}
+                          className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white flex items-center justify-center cursor-pointer hover:bg-black/80"
+                          aria-label="Remove image"
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Label */}
               <div>

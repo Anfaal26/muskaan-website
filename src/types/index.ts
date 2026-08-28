@@ -5,6 +5,7 @@
 export interface DbProduct {
   id: string;
   image_url: string;
+  gallery_urls: string[];
   label: string | null;
   price: number | null;
   description: string | null;

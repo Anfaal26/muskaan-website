@@ -3,6 +3,15 @@ import { verifyAdminToken } from '../../_lib/auth';
 import { getSupabaseAdmin } from '../../_lib/supabaseAdmin';
 
 const PAGE_SIZE = 20;
+const MAX_GALLERY_IMAGES = 8;
+
+function parseGalleryUrls(input: unknown): string[] {
+  if (!Array.isArray(input)) return [];
+  return input
+    .filter((u): u is string => typeof u === 'string' && u.trim().length > 0)
+    .map(u => u.trim())
+    .slice(0, MAX_GALLERY_IMAGES);
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // All routes require admin auth
@@ -32,7 +41,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   if (req.method === 'POST') {
-    const { image_url, label, price, description, category } = req.body ?? {};
+    const { image_url, gallery_urls, label, price, description, category } = req.body ?? {};
 
     if (!image_url || typeof image_url !== 'string') {
       return res.status(400).json({ error: 'image_url is required' });
@@ -40,6 +49,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const row = {
       image_url: image_url.trim(),
+      gallery_urls: parseGalleryUrls(gallery_urls),
       label: typeof label === 'string' && label.trim() ? label.trim() : null,
       price: price != null && !isNaN(Number(price)) ? Number(price) : null,
       description: typeof description === 'string' && description.trim() ? description.trim() : null,

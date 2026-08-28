@@ -10,15 +10,19 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- Products table
 -- ============================================================
 CREATE TABLE IF NOT EXISTS products (
-  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  image_url   TEXT NOT NULL,
-  label       TEXT,                           -- defaults to "Latest Collection" in app
-  price       NUMERIC(10, 2),                 -- null = hide price
-  description TEXT,                           -- null = show generic description
-  category    TEXT,
-  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  image_url    TEXT NOT NULL,
+  gallery_urls TEXT[] NOT NULL DEFAULT '{}',   -- extra photos (e.g. generated angle variants) shown on the product page
+  label        TEXT,                           -- defaults to "Latest Collection" in app
+  price        NUMERIC(10, 2),                 -- null = hide price
+  description  TEXT,                           -- null = show generic description
+  category     TEXT,
+  created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Existing databases: run this if the products table already exists without gallery_urls
+-- ALTER TABLE products ADD COLUMN IF NOT EXISTS gallery_urls TEXT[] NOT NULL DEFAULT '{}';
 
 -- Auto-update updated_at on row change
 CREATE OR REPLACE FUNCTION update_updated_at()
