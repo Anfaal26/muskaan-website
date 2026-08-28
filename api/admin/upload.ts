@@ -5,8 +5,9 @@ import { getSupabaseAdmin } from '../_lib/supabaseAdmin';
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
+// Base64 encoding adds ~33% overhead, so a 5 MB image needs ~6.7 MB of body space.
 export const config = {
-  api: { bodyParser: { sizeLimit: '6mb' } },
+  api: { bodyParser: { sizeLimit: '8mb' } },
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

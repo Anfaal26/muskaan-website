@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Package, Tag, DollarSign, Plus } from 'lucide-react';
+import { Package, Tag, DollarSign, Plus, Images } from 'lucide-react';
 import { useAdminDashboard } from '../../hooks/useProducts';
 import AdminLayout from '../../components/admin/AdminLayout';
 import ProductModal from '../../components/admin/ProductModal';
+import BatchUploadModal from '../../components/admin/BatchUploadModal';
 import type { DashboardStats, DbProduct } from '../../types';
 
 export default function AdminDashboardPage() {
   const { data, isLoading } = useAdminDashboard();
   const [showModal, setShowModal] = useState(false);
+  const [showBatchModal, setShowBatchModal] = useState(false);
   const stats = data as DashboardStats | undefined;
 
   const statCards = [
@@ -21,14 +23,24 @@ export default function AdminDashboardPage() {
     <AdminLayout
       title="Dashboard"
       action={
-        <button
-          type="button"
-          onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 cursor-pointer transition-colors"
-        >
-          <Plus size={16} />
-          Upload New Product
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowBatchModal(true)}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+          >
+            <Images size={16} />
+            Batch Upload
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 cursor-pointer transition-colors"
+          >
+            <Plus size={16} />
+            Upload New Product
+          </button>
+        </div>
       }
     >
       {isLoading ? (
@@ -93,6 +105,7 @@ export default function AdminDashboardPage() {
       )}
 
       <ProductModal open={showModal} onClose={() => setShowModal(false)} />
+      <BatchUploadModal open={showBatchModal} onClose={() => setShowBatchModal(false)} />
     </AdminLayout>
   );
 }

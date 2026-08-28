@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Upload } from 'lucide-react';
 import { useCreateProduct, useUpdateProduct } from '../../hooks/useProducts';
+import { validateImageFile, uploadProductImage } from '../../lib/uploadImage';
 import type { DbProduct } from '../../types';
 
 interface Props {
@@ -9,8 +10,6 @@ interface Props {
   product?: DbProduct | null;
   onClose: () => void;
 }
-
-const ALLOWED = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
 export default function ProductModal({ open, product, onClose }: Props) {
   const isEdit = !!product;
@@ -43,38 +42,15 @@ export default function ProductModal({ open, product, onClose }: Props) {
 
   function handleFile(file: File) {
     setUploadError(null);
-    if (!ALLOWED.includes(file.type)) {
-      setUploadError('Only JPG, PNG, or WebP images are allowed.');
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      setUploadError('Image must be under 5 MB.');
+    const err = validateImageFile(file);
+    if (err) {
+      setUploadError(err);
       return;
     }
     setImageFile(file);
     const reader = new FileReader();
     reader.onload = e => setImagePreview(e.target?.result as string);
     reader.readAsDataURL(file);
-  }
-
-  async function uploadImage(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const base64 = (reader.result as string).split(',')[1];
-        const res = await fetch('/api/admin/upload', {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ base64, mimeType: file.type, fileName: file.name }),
-        });
-        if (!res.ok) reject(new Error('Upload failed'));
-        const data = (await res.json()) as { url: string };
-        resolve(data.url);
-      };
-      reader.onerror = () => reject(new Error('File read error'));
-      reader.readAsDataURL(file);
-    });
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -89,7 +65,7 @@ export default function ProductModal({ open, product, onClose }: Props) {
     try {
       let imageUrl = product?.image_url ?? '';
       if (imageFile) {
-        imageUrl = await uploadImage(imageFile);
+        imageUrl = await uploadProductImage(imageFile);
       }
 
       const body = {

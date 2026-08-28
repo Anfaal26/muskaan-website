@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { MoreVertical, Plus, Trash2, Pencil } from 'lucide-react';
+import { MoreVertical, Plus, Trash2, Pencil, Images } from 'lucide-react';
 import { useAdminProducts, useDeleteProduct } from '../../hooks/useProducts';
 import AdminLayout from '../../components/admin/AdminLayout';
 import ProductModal from '../../components/admin/ProductModal';
+import BatchUploadModal from '../../components/admin/BatchUploadModal';
 import ConfirmDialog from '../../components/admin/ConfirmDialog';
 import type { DbProduct } from '../../types';
 
@@ -12,6 +13,7 @@ export default function AdminProductsPage() {
   const deleteProduct = useDeleteProduct();
 
   const [showModal, setShowModal] = useState(false);
+  const [showBatchModal, setShowBatchModal] = useState(false);
   const [editProduct, setEditProduct] = useState<DbProduct | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -72,6 +74,14 @@ export default function AdminProductsPage() {
             }`}
           >
             {selectMode ? 'Cancel Select' : 'Select'}
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowBatchModal(true)}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+          >
+            <Images size={16} />
+            Batch Upload
           </button>
           <button
             type="button"
@@ -221,6 +231,9 @@ export default function AdminProductsPage() {
         product={editProduct}
         onClose={() => { setShowModal(false); setEditProduct(null); }}
       />
+
+      {/* Batch upload modal */}
+      <BatchUploadModal open={showBatchModal} onClose={() => setShowBatchModal(false)} />
 
       {/* Single delete confirm */}
       <ConfirmDialog
